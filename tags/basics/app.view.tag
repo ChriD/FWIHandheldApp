@@ -165,8 +165,13 @@
      * will be called when the 'enter' transition will be finished
      */
     entered() {
-        //self.root.style.zIndex = "1";        
+        //self.root.style.zIndex = "1";                
+        // make the view focusable and focus 
+        //self.root.firstChild.tabIndex = "1"
+        self.root.firstChild.focus();
+        // reroute the 'entered' event to the 'real' view
         self.root.firstChild._tag.trigger("entered")
+
     }
 
   </script>  

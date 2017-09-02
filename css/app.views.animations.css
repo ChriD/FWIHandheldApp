@@ -125,6 +125,19 @@
 }
 
 
+.fadeFast { 
+  opacity: 0;
+  animation-duration: 0.15s;
+  animation-fill-mode: both;
+}
+.fadeFast-enter {
+  animation-name: fadeIn;
+}
+.fadeFast-leave {
+  animation-name: fadeOut;
+}
+
+
 @keyframes fadeIn {
   from {
     opacity: 0;

@@ -56,8 +56,6 @@
           var viewElement = document.getElementById(_viewId)          
           if(viewElement)
           {
-            viewElement.tabIndex = "1"
-            //viewElement.focus()
             viewElement._tag.enter()
           }
         }
@@ -70,10 +68,13 @@
 
     addKeyHandlers()
     {      
-      self.root.addEventListener("keydown", function(_e){   
+      // add the event listener for the views container
+      // we do use all keystrokes for the document, in fact w eassuem that there is only one 'views' tag
+      // which may receive keydown events, if scope is changing we have to redesign this one!
+      document.addEventListener("keydown", function(_e){
         var viewElement = document.getElementById(self.currentViewId)        
-        if(viewElement)
-        {
+        if(viewElement && !viewElement._tag.isCurrentlyAnimated)
+        {          
           _e.isPropagationStopped = false;
           viewElement._tag.trigger("handleKey", _e)
           if(!_e.isPropagationStopped)

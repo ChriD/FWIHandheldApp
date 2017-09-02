@@ -4,9 +4,11 @@
     <div class="app-content">                          
     <div class="app-contentContainer"> 
 
-      <app-views id="app-appViews" currentViewId="app-view-home" animation="fade" enablekeyhandler="1">
-        <app-view id="app-view-home"      viewTag="app-view-home"></app-view>                  
-        <app-view id="app-view-counting"  viewTag="app-view-counting"></app-view>
+      <app-views id="app-appViews" currentViewId="app-view-home" animation="fadeFast" enablekeyhandler="1">
+        <app-view id="app-view-home"        viewTag="app-view-home"></app-view>                  
+        <app-view id="app-view-counting"    viewTag="app-view-counting"></app-view>
+        <app-view id="app-view-iteminfo"    viewTag="app-view-iteminfo"></app-view>
+        <app-view id="app-view-appsettings" viewTag="app-view-appsettings"></app-view>
       </app-views>      
       
     </div>        
@@ -32,11 +34,7 @@
     this.on('mount', () => {      
       if(self.opts.mountedCallback)
         self.opts.mountedCallback();
-    })   
-
-    entered()
-    {      
-    }
+    })  
 
   </script> 
 

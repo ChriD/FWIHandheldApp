@@ -103,26 +103,22 @@
       if(self.selectionCallback && self.currentSelectedDataIdx >= 0)
         self.selectionCallback(self.listData[self.currentSelectedDataIdx])
     }
-
-
-    addKeyHandlers()
-    {      
-      self.root.addEventListener("keydown", function(_e){         
-        if(_e.keyCode == 40){          
-          self.selectNextListItem()
-        }
-        if(_e.keyCode == 38){          
-          self.selectPrevListItem()
-        }
-        if(_e.keyCode == 13){          
-          self.itemSelected()
-        }
-      }, false)
-    }
     
 
-    this.on('mount', () => {
-      self.addKeyHandlers()
+    this.on('handleKey', (_e) => {            
+      if(_e.keyCode == 40){          
+        self.selectNextListItem()
+      }
+      if(_e.keyCode == 38){          
+        self.selectPrevListItem()
+      }
+      if(_e.keyCode == 13){          
+        self.itemSelected()
+      }     
+    })
+    
+
+    this.on('mount', () => {      
     }) 
    
   </script>   
