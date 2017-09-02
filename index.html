@@ -1,0 +1,69 @@
+<!doctype html>
+<html>
+  <head>
+    <title>FWI Handheld</title>    
+    <link rel="stylesheet" href="css/app.fonts.css">    
+    <link rel="stylesheet" href="css/app.vars.css">
+    <link rel="stylesheet" href="css/app.css">
+    <link rel="stylesheet" href="css/app.handheld.css">
+    <link rel="stylesheet" href="css/app.basic.css">
+    <link rel="stylesheet" href="css/app.views.animations.css">    
+  </head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/> 
+
+  <body>
+    <app>      
+      <app-views id="appMainViews" currentViewId="app-view-splash" animation="fade">
+        <!-- the splash screen should be on the top level view container and will be shown on startup only-->
+        <app-view viewTag="app-view-splash" id="app-view-splash"></app-view>
+        <!-- The 'busy' views should fill the whole screen (even header) and therefore they are on the top level-->
+        <!--
+        <app-view viewTag="app-view-busy" id="app-view-systemOffline" busyText="System offline" progressText="Waiting for System to appear"></app-view>
+        <app-view viewTag="app-view-busy" id="app-view-roomOffline" busyText="Room offline" progressText="Please turn on the room renderer"></app-view>
+        -->
+        <!-- the app view will hold the header, footer and other stuff and will serve all other views -->
+        <app-view viewTag="app-view-app" id="app-view-app"></app-view>
+      </app-views>      
+    </app>
+
+    
+    <!-- Riot -->
+    <!--<script src="riot+compiler.min.js"></script>-->
+    <script src="js/riot+compiler.js"></script>      
+
+    <!-- Riot tags -->
+    <script src="tags/basics/app.tag" type="riot/tag"></script>      
+    <script src="tags/basics/app.view.tag" type="riot/tag"></script>
+    <script src="tags/basics/app.views.tag" type="riot/tag"></script>
+    <script src="tags/components/app.footer.tag" type="riot/tag"></script>
+    <script src="tags/views/app.view.busy.tag" type="riot/tag"></script>      
+    <script src="tags/views/app.view.app.tag" type="riot/tag"></script>
+    <script src="tags/views/app.view.home.tag" type="riot/tag"></script>
+    <script src="tags/views/app.view.splash.tag" type="riot/tag"></script>
+    <script src="tags/views/app.view.counting.tag" type="riot/tag"></script>
+    
+    <script src="tags/components/app.list.menuitem.tag" type="riot/tag"></script>
+    <script src="tags/components/app.list.tag" type="riot/tag"></script>
+
+    <!-- App -->    
+    <script type="text/javascript" src="js/app.logger.js"></script>
+    <script type="text/javascript" src="js/app.base.js"></script>
+    <script type="text/javascript" src="js/app.js"></script>
+    <script type="text/javascript" src="js/app.handheld.js"></script> 
+    <script type="text/javascript" src="js/app.handheld.moser.js"></script> 
+          
+    <script>
+      
+      var app = new AppHandheld_Moser()
+      app.init()
+
+      // after initialization the splash screen is shown, after a few seconds we hide the splash screen 
+      setTimeout(function(){    
+        app.hideSplashScreen();                            
+      },1000)
+            
+    </script> 
+    
+  </body>
+
+</html>
