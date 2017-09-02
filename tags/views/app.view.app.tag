@@ -1,6 +1,6 @@
 <app-view-app>
 
-  <div class="app-toolbar">Header</div>
+  <app-toolbar> class="app-toolbar">Header</app-toolbar>
     <div class="app-content">                          
     <div class="app-contentContainer"> 
 
