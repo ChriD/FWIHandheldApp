@@ -62,6 +62,12 @@
     this.infoText     = this.opts.listItemData.infoText 
     this.shortcutText = this.opts.listItemData.shortcutText
 
+    this.on('mount', () => {         
+      self.root.firstChild.onclick = function(){
+        console.log("clicked menu item: " + self.text);
+      }      
+    })
+
     setText(_text) {
       self.text = _text
       self.update()
