@@ -7,7 +7,8 @@
     <link rel="stylesheet" href="css/app.css">
     <link rel="stylesheet" href="css/app.handheld.css">
     <link rel="stylesheet" href="css/app.basic.css">
-    <link rel="stylesheet" href="css/app.views.animations.css">    
+    <link rel="stylesheet" href="css/app.views.animations.css">
+    <link rel="stylesheet" href="css/font-awesome.min.css">    
   </head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/> 
 
@@ -39,7 +40,8 @@
     <script src="tags/views/app.view.appSettings.tag" type="riot/tag"></script>
     <script src="tags/views/app.view.itemInfo.tag" type="riot/tag"></script>
     
-    <script src="tags/components/app.icon.tag" type="riot/tag"></script>
+    <script src="tags/components/app.icon.fa.tag" type="riot/tag"></script>
+    <script src="tags/components/app.icon.fa.battery.tag" type="riot/tag"></script>
     <script src="tags/components/app.clock.tag" type="riot/tag"></script>
     <script src="tags/components/app.toolbar.tag" type="riot/tag"></script>
     <script src="tags/components/app.footer.tag" type="riot/tag"></script>
@@ -60,12 +62,20 @@
 
       // after initialization the splash screen is shown, after a few seconds we hide the splash screen 
       setTimeout(function(){    
-        app.hideSplashScreen();                            
+        app.hideSplashScreen()
       },1000)
 
-      //setTimeout(function(){    
-      //  app.getToolbar().setText("Test");                            
-      //},2000)
+      /*
+      setTimeout(function(){    
+        app.setBusy(true)                            
+      },2000)
+
+      setTimeout(function(){    
+        app.setBusy(false)                            
+      },2500)
+      */
+      
+      
 
 
 

@@ -26,8 +26,8 @@ class AppHandheld_Moser extends AppHandheld
 
     changeAppView(_viewId)
     {
-        app.changeView("app-appViews", _viewId) 
-    }
+        this.changeView("app-appViews", _viewId) 
+    }  
     
 
     /*

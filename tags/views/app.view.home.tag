@@ -26,6 +26,10 @@
           app.logDebug("Change app view to : " + _itemData.viewTagName)
           app.changeAppView(_itemData.viewTagName);
         }
+        else
+        {
+          app.exitApp();
+        }
       }      
     })   
 

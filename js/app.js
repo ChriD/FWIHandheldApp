@@ -56,5 +56,16 @@ class App extends AppBase
         return component._tag.getViewTag();
     }
 
+
+    setBusy(_busy)
+    {    
+    }
+
+
+    exitApp()
+    {
+        navigator.app.exitApp();
+    }
+
 }
 

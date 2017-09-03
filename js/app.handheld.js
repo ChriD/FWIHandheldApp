@@ -14,7 +14,9 @@ class AppHandheld extends App
     getToolbar()
     {
         var component = document.getElementById("app-toolbar")
-        return component._tag;
+        if(component)
+            return component._tag;
+        return null;
     }
 
     /**
@@ -31,6 +33,19 @@ class AppHandheld extends App
     hideSplashScreen()
     {
         this.changeView("appMainViews", "app-view-app")
+    }
+
+
+    setBusy(_busy)
+    {
+        if(this.getToolbar())
+            this.getToolbar().setBusy(_busy);
+    }
+
+
+    changeView(_viewContainerId, _viewId)
+    {        
+        super.changeView(_viewContainerId, _viewId)                        
     }
 
 }

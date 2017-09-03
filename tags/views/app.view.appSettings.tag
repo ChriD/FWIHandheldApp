@@ -2,6 +2,10 @@
   
   <div>
   Settings
+  <!--
+  https://www.joshmorony.com/a-summary-of-local-storage-options-for-phonegap-applications/
+  we will use indexed db!
+  -->
   </div>
 
   <style>  

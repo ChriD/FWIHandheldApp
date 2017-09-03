@@ -23,7 +23,8 @@
     
     updateClock(){
       var now = new Date();
-      self.clockVisualString = self.addLeading0(now.getHours().toString()) + ":" + self.addLeading0(now.getMinutes().toString())  + ":" + self.addLeading0(now.getSeconds().toString())      
+      //self.clockVisualString = self.addLeading0(now.getHours().toString()) + ":" + self.addLeading0(now.getMinutes().toString())  + ":" + self.addLeading0(now.getSeconds().toString())      
+      self.clockVisualString = self.addLeading0(now.getHours().toString()) + ":" + self.addLeading0(now.getMinutes().toString())
       this.update();
     }
 
