@@ -23,6 +23,10 @@
     this.on('requestPrevViewId', (_args) => {            
       _args.viewId = "app-view-home"
     })  
+
+    name(){
+      return "Inventur" // LABEL
+    }
     
 
   </script>  

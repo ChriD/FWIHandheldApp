@@ -46,7 +46,7 @@ class App extends AppBase
     getViewContainer(_viewContainerId)
     {
         var component = document.getElementById(_viewContainerId)
-        return component._tag.getViewTag();
+        return component._tag;
     }
 
 

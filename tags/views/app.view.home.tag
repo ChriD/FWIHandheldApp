@@ -35,6 +35,11 @@
       listComponent._tag.trigger("handleKey", _e)      
     })
 
+
+    name(){
+      return "Dash" // LABEL
+    }
+
   </script>  
 
 </app-view-home>

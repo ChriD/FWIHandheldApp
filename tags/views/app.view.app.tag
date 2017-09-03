@@ -1,6 +1,6 @@
 <app-view-app>
 
-  <app-toolbar> class="app-toolbar">Header</app-toolbar>
+  <app-toolbar class="app-toolbar" id="app-toolbar" text="Dash"></app-toolbar>
     <div class="app-content">                          
     <div class="app-contentContainer"> 
 
@@ -34,7 +34,14 @@
     this.on('mount', () => {      
       if(self.opts.mountedCallback)
         self.opts.mountedCallback();
+
+      // when a view is changing we have to update the toolbar text
+      app.getViewContainer("app-appViews").on('changeView', (_viewId) => {              
+        app.getToolbar().setText(app.getView(_viewId).name())
+      })  
+
     })  
+   
 
   </script> 
 

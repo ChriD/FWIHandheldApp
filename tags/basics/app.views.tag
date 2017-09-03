@@ -57,6 +57,7 @@
           if(viewElement)
           {
             viewElement._tag.enter()
+            self.trigger("changeView", _viewId)
           }
         }
         

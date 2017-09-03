@@ -39,6 +39,8 @@
     <script src="tags/views/app.view.appSettings.tag" type="riot/tag"></script>
     <script src="tags/views/app.view.itemInfo.tag" type="riot/tag"></script>
     
+    <script src="tags/components/app.icon.tag" type="riot/tag"></script>
+    <script src="tags/components/app.clock.tag" type="riot/tag"></script>
     <script src="tags/components/app.toolbar.tag" type="riot/tag"></script>
     <script src="tags/components/app.footer.tag" type="riot/tag"></script>
     <script src="tags/components/app.list.menuitem.tag" type="riot/tag"></script>
@@ -61,6 +63,13 @@
         app.hideSplashScreen();                            
       },1000)
 
+      //setTimeout(function(){    
+      //  app.getToolbar().setText("Test");                            
+      //},2000)
+
+
+
+      
       /*
       var oldActive;
       setInterval(function() {             

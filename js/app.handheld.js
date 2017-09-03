@@ -9,6 +9,15 @@ class AppHandheld extends App
     
 
     /**
+     * return the toolbar tag          
+     */
+    getToolbar()
+    {
+        var component = document.getElementById("app-toolbar")
+        return component._tag;
+    }
+
+    /**
      * show the splashscreen of the application           
      */
     showSplashScreen()
