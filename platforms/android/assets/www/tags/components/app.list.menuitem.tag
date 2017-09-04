@@ -63,8 +63,9 @@
     this.shortcutText = this.opts.listItemData.shortcutText
 
     this.on('mount', () => {         
-      self.root.firstChild.onclick = function(){
-        console.log("clicked menu item: " + self.text);
+      self.root.firstChild.onclick = function(){                
+        app.logDebug("Clicked menu item: " + self.text + " (" + self.root.id + ")")
+        self.root.parentElement._tag.itemClicked(self.root.dataset.idx)
       }      
     })
 

@@ -103,6 +103,14 @@
       if(self.selectionCallback && self.currentSelectedDataIdx >= 0)
         self.selectionCallback(self.listData[self.currentSelectedDataIdx])
     }
+
+    
+    itemClicked(_idx)
+    {
+      self.selectListItemIdx(_idx)
+      self.itemSelected()
+    }
+    
     
 
     this.on('handleKey', (_e) => {            

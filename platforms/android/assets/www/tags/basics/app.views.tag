@@ -67,6 +67,16 @@
     }
 
 
+    showPrevView()
+    {
+      var args = new Object();
+      var viewElement = document.getElementById(self.currentViewId)
+      viewElement._tag.trigger("requestPrevViewId", args);
+      if(args.viewId)
+        self.changeView(args.viewId) 
+    }
+
+
     addKeyHandlers()
     {      
       // add the event listener for the views container
@@ -82,10 +92,7 @@
           {
             if(_e.keyCode == 27)
             {
-              var args = new Object();
-              viewElement._tag.trigger("requestPrevViewId", args);
-              if(args.viewId)
-                self.changeView(args.viewId)
+              self.showPrevView();
             }
           }
         }            

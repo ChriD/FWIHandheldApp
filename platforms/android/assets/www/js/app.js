@@ -49,6 +49,12 @@ class App extends AppBase
         return component._tag;
     }
 
+    
+    getMainViewContainer()
+    {
+        return app.getViewContainer("app-appViews")  
+    }
+
 
     getView(_viewId)
     {

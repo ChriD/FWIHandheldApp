@@ -1,8 +1,10 @@
 <app-toolbar>
 
   <div class="left">{ toolbarInfoText }</div>
+  <!--
   <app-clock class="right"></app-clock>    
   <app-icon-fa-battery class="right"></app-icon-fa-battery>
+  -->
   <app-icon-fa class="right busy" name="fa-gear"></app-icon-fa>
 
   <style>

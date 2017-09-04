@@ -155,9 +155,9 @@
      * will be called when the 'leave' transition will be finished
      */
     left() {
-       //self.root.style.zIndex = "-999";
+       self.root.style.zIndex = "-999";
        self.root.style.display = "none";       
-       self.root.firstChild._tag.trigger("left")
+       self.root.firstChild._tag.trigger("left")      
     }
 
 
@@ -165,7 +165,7 @@
      * will be called when the 'enter' transition will be finished
      */
     entered() {
-        //self.root.style.zIndex = "1";                
+        self.root.style.zIndex = "1";                
         // make the view focusable and focus 
         //self.root.firstChild.tabIndex = "1"
         self.root.firstChild.focus();
