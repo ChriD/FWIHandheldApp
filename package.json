@@ -1,7 +1,7 @@
 {
-  "name": "com.fwi.sagemobile",
-  "version": "1.0.0",
-  "displayName": "SageX3Mobile",
+  "name": "com.fwi.handheld",
+  "version": "0.0.1",
+  "displayName": "FWI-Handheld",
   "cordova": {
     "platforms": [
       "android"
