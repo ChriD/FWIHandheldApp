@@ -1,0 +1,161 @@
+
+/* animations for view transitions (make in own file) */
+
+.grow {
+  transform: scale(0.0);  
+}
+.grow-enter {
+  animation: grow 0.5s forwards;  
+}
+.grow-leave {
+  animation: shrink 0.5s backwards;
+}
+
+
+/**/
+/*https://stackoverflow.com/questions/7897208/grow-from-center*/
+@keyframes grow {
+    100% { transform: scale(1); }
+}
+
+@keyframes shrink {
+    0% { transform: scale(1); }
+    100% { transform: scale(0.0); }
+}
+
+
+.switch-left {
+  transform: translateX(-100%); 
+}
+.switch-left-enter {
+  animation: slideX-0 0.5s forwards;
+}
+.switch-left-leave {
+  animation: slideX-left 0.5s backwards;
+}
+
+
+.switch-right {
+  transform: translateX(+100%); 
+}
+.switch-right-enter {
+  animation: slideX-0 0.5s forwards;
+}
+.switch-right-leave {
+  animation: slideX-right 0.5s backwards;
+}
+
+
+.slide-left {
+  transform: translateX(-100%); 
+}
+.slide-left-enter {
+  animation: slideX-0 0.5s forwards;
+}
+.slide-left-leave {
+  animation: slideX-right 0.5s forwards;
+}
+    
+
+.slide-right {
+  transform: translateX(+100%); 
+}
+.slide-right-enter {
+  animation: slideX-0 0.5s forwards;
+}
+.slide-right-leave {
+  animation: slideX-left 0.5s forwards;
+}
+
+
+
+.animation-beat1 {
+  animation: beat1 2.5s infinite;
+}
+
+.animation-beat2 {
+  animation: beat2 1.0s infinite;
+}
+
+/**/
+@keyframes slideX-0 {
+    100% { transform: translateX(0%); }
+}
+
+@keyframes slideX-right {
+    0% { transform: translateX(0%); }
+    100% { transform: translateX(+100%); }
+}
+
+@keyframes slideX-left {
+    0% { transform: translateX(0%); }
+    100% { transform: translateX(-100%); }
+}
+
+
+
+@keyframes beat1 {
+  0%    { transform: scale(1.0); }
+  5%    { transform: scale(1.2); }
+  10%   { transform: scale(1.1); }
+  15%   { transform: scale(1.3); }
+  50%   { transform: scale(1.0); }
+  100%  { transform: scale(1.0); }
+}
+
+@keyframes beat2 {
+  0%    { transform: scale(1.0); }
+  30%   { transform: scale(1.2); }
+  100%  { transform: scale(1.0); }
+}
+
+
+
+
+.fade { 
+  opacity: 0;
+  animation-duration: 0.25s;
+  animation-fill-mode: both;
+}
+.fade-enter {
+  animation-name: fadeIn;
+}
+.fade-leave {
+  animation-name: fadeOut;
+}
+
+
+.fadeFast { 
+  opacity: 0;
+  animation-duration: 0.15s;
+  animation-fill-mode: both;
+}
+.fadeFast-enter {
+  animation-name: fadeIn;
+}
+.fadeFast-leave {
+  animation-name: fadeOut;
+}
+
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+

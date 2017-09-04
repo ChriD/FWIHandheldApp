@@ -1,0 +1,69 @@
+<!--
+Title: Basic BarcodeReader SDK Example
+Purpose: Walk through of the basic steps needed use this SDK
+Description:
+        1. On page load create a BarcodeReader object
+        2. After BarcodeReader object is created we can configure our symbologies and add our event listener
+        3. Use onSetComplete to verify the symbology configuration
+        4. Use onBarcodeDataReady to handle barcode data when available
+ -->
+
+<html>
+	<head>
+		<title>Basic Barcode Reader Sample</title>
+		<script type="text/javascript" src="BarcodeReader.js"></script>
+		<script type="text/javascript">
+		var defaultScanner;
+
+		// On page load create a BarcodeReader object
+		function setup ()
+		{
+			defaultScanner = new BarcodeReader(null, onBarcodeReaderComplete);
+		}
+
+		// After BarcodeReader object is created we can configure our symbologies and add our event listener
+		function onBarcodeReaderComplete ( result )
+		{
+			if (result.status == 0)
+			{
+	            // BarcodeReader object was successfully created
+
+                // Configure the symbologies needed
+                defaultScanner.set("Symbology", "Code39", "Enable", "true", onSetComplete);
+                defaultScanner.set("Symbology", "Code128", "EnableCode128", "true", onSetComplete);
+
+                // Add an event handler for the barcodedataready event
+                defaultScanner.addEventListener("barcodedataready", onBarcodeDataReady, false);
+			}
+			else
+			{
+				defaultScanner = null;
+				alert('Failed to create BarcodeReader, ' + result.message);
+			}
+		}
+
+		// Verify the symbology configuration
+		function onSetComplete ( result )
+		{
+			if (result.status != 0)
+			{
+				alert('set Family: ' + result.family + ', Key: ' + result.key + ', Option: ' + result.option +
+					', Value: ' + result.value + 'failed. ' + result.message);
+			}
+		}
+
+		// Handle barcode data when available
+		function onBarcodeDataReady (data, type, time)
+		{
+			document.getElementById("BarcodeData").value = data;
+			document.getElementById("SymbType").value = type;
+			document.getElementById("ReadTime").value = time;
+		}
+		</script>
+	</head>
+	<body onload="setup();">
+		<label for="BarcodeData">Data:</label><input type="text" id="BarcodeData" size=20/><br>
+		<label for="SymbType">Symbology:</label><input type="text" id="SymbType" size=16/><br>
+		<label for="ReadTime">Time:</label><input type="text" id="ReadTime" size=24/><br>
+	</body>
+</html>
