@@ -1,11 +1,21 @@
 <app-view-appSettings>
   
   <div>
-  Settings
+  Settings2
   <!--
   https://www.joshmorony.com/a-summary-of-local-storage-options-for-phonegap-applications/
   we will use indexed db!
   -->
+    <div>
+      <div>X3 Webservice Url</div>
+      <div></div>
+    </div>
+
+    <div>
+      <div>X3 Webservice User</div>
+      <div></div>
+    </div>
+
   </div>
 
   <style>  
