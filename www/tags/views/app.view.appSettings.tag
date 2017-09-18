@@ -1,14 +1,49 @@
 <app-view-appSettings>
   
-  <div>
-  Settings
+  <div class="settings">  
   <!--
   https://www.joshmorony.com/a-summary-of-local-storage-options-for-phonegap-applications/
-  we will use indexed db!
+  we will use indexed db!    
   -->
+    <div class="settingsItem">
+      <div>X3 Webservice Url</div>
+      <div><input type="text"></input></div>
+    </div>
+    <div class="settingsItem">
+      <div>X3 Webservice User</div>
+      <div><input type="text"></input></div>
+    </div>
+    <div class="settingsItem">
+      <div>X3 Webservice Passwort</div>
+      <div><input type="password"></input></div>
+    </div>
+    <div class="settingsItem">
+      <div>X3 Webservice Pool</div>
+      <div><input type="password"></input></div>
+    </div>
+    <div class="settingsItem">
+      <div>X3 Webservice Sprache</div>
+      <div><input type="password"></input></div>
+    </div>
+  </div>
+
+  <div class="buttonRow">
+    <button style="width: 49%;">Speichern</button>
+    <button style="width: 49%;">Abbrechen</button>
   </div>
 
   <style>  
+    :scope {      
+      display: block;      
+    }  
+
+    .settings {
+      padding: 1em;
+    }
+
+    .settingsItem {
+      margin-bottom: 0.5em;
+    }
   </style>
 
   <script>

@@ -1,0 +1,27 @@
+/* */
+
+input {
+    display: block;
+    margin: 0;
+    width: 100%;     
+    appearance: none;
+    box-shadow: none;
+    border-radius: none;
+    font-family: 'segoe ui', arial, sans-serif;     
+    font-size: 1em;
+  }
+  input:focus {
+    outline: none;
+  }
+
+
+input {
+    padding: 10px;
+    border: none;
+    border-bottom: solid 0.25em #c9c9c9;
+    transition: border 0.3s;
+  }
+input:focus,
+input.focus {
+    border-bottom: solid 0.25em rgb(238,114,3);
+  }

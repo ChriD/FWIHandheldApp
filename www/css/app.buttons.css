@@ -1,0 +1,25 @@
+/* */
+
+.buttonRow {    
+    width: 100%;
+    background-color: green;
+    border-top: solid 0.15em #FFFFFF;
+}
+
+.buttonRow button {
+    color: #FFFFFF;
+    background: rgba(0,0,0,0);
+    border: 0px;
+    font-size: 1em;
+    padding: 0.5em;
+  }
+.buttonRow button:hover,
+.buttonRow button.hover {
+    border-color: rgb(238,114,3);
+    color: rgb(238,114,3);
+  }
+.buttonRow button:active,
+.buttonRow button.active {
+    border-color: rgb(238,114,3);
+    color: rgb(238,114,3);
+  }
