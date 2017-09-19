@@ -5,14 +5,14 @@
   <app-clock class="right"></app-clock>    
   <app-icon-fa-battery class="right"></app-icon-fa-battery>
   -->
-  <app-icon-fa class="right busy" name="fa-gear"></app-icon-fa>
+  <app-icon-fa class="right busy" name="fa-hourglass"></app-icon-fa>
 
   <style>
     :scope {
       display: block;
       padding: 0.5em;
       padding-left: 1em; 
-      padding-right: 1em;
+      padding-right: 1em;      
     }
 
     .right {
@@ -22,6 +22,10 @@
 
     .left {
       float: left;
+    }
+
+    .busy {
+      display: none;
     }
 
   </style>
@@ -45,7 +49,13 @@
       self.isBusy = _busy;  
       var busyElement = self.getBusyElement();
       if(busyElement)
+      {
         busyElement._tag.spin(_busy)
+        if(!_busy)
+          busyElement.style.display = 'none'
+        else
+          busyElement.style.display = 'block'
+      }
 
     }
 

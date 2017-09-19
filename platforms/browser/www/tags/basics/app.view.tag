@@ -171,7 +171,6 @@
         self.root.firstChild.focus();
         // reroute the 'entered' event to the 'real' view
         self.root.firstChild._tag.trigger("entered")
-
     }
 
   </script>  
