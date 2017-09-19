@@ -1,15 +1,22 @@
 
 
 class App extends AppBase
-{     
+{         
     constructor() 
     { 
         super()
+        this.tools      = new AppTools()
+        this.settings   = new AppSettings(this.name())
     }
 
     additionalLogIdentifier()
     {
-        return "App"
+        return this.name();
+    }
+
+    name()
+    {
+        return "Moser Handheld"
     }
 
     init()

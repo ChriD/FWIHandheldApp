@@ -6,7 +6,7 @@
     <div class="view-content">
       <div class="view-contentContainer">
 
-        <div class="settings">      
+        <div id="appSettings-settings" class="settings">      
           <div class="settingsItem">
             <div>X3 Webservice Url</div>
             <div><input type="text" id="SETTINGS_X3_URL" data-id="X3_URL"></input></div>
@@ -60,18 +60,30 @@
     this.on('mount', () => {      
       if(self.opts.mountedCallback)
         self.opts.mountedCallback();
-             
-      document.getElementById("appSettings-button-save").onclick = function(){ 
-          //
-          //app.saveSettings()                       
+      
+      // save the current settings and the close the view
+      document.getElementById("appSettings-button-save").onclick = function(){       
+        self.saveSettings().then(function(){
           app.getMainViewContainer().showPrevView();
-        }  
+        }).catch(function(_error){
+          app.logError(_error.toString(), _error);
+        })               
+      }  
 
+      // close the view without saving the settings
       document.getElementById("appSettings-button-cancel").onclick = function(){                        
-          app.getMainViewContainer().showPrevView();
-        }    
+        app.getMainViewContainer().showPrevView();
+      }          
 
     })
+
+
+    this.on('entered', () => {            
+      // load the current settings when entering the view
+      self.loadSettings().catch(function(_error){
+        app.logError(_error.toString(), _error);
+      })   
+    })     
 
     this.on('handleKey', (_e) => {      
       console.log("handleKey trigger 2")
@@ -84,6 +96,52 @@
     name(){
       return "Einstellungen" // LABEL
     }
+
+
+    saveSettings()
+    {
+      var self = this;     
+      return new Promise(function(_resolve, _reject){
+        try
+        {
+          app.tools.getInputDataObject(document.getElementById("appSettings-settings")).then(function(_inputData){
+            app.settings.saveSettings("APP", app.tools.inputDataObjectToStorageObject(_inputData)).then(function(){
+              _resolve()
+            }).catch(function(_exception){
+              _reject(_exception)
+            });            
+          }).catch(function(_exception){
+            _reject(_exception)
+          })
+        }
+        catch(exception)
+        {
+            _reject(exception);
+        }
+      });
+    }
+
+
+    loadSettings()
+    {
+      var self = this;
+      return new Promise(function(_resolve, _reject){
+        try
+        {
+          app.settings.loadSettings("APP").then(function(_settingsData){
+            app.tools.setDataObjectToInput(document.getElementById("appSettings-settings"), _settingsData)
+            _resolve()
+          }).catch(function(_exception){
+            _reject(_exception)
+          })
+        }
+        catch(exception)
+        {
+            _reject(exception);
+        }
+      });
+    }
+
     
 
   </script>  
