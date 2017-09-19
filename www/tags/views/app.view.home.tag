@@ -36,7 +36,10 @@
 
     this.on('handleKey', (_e) => {            
       var listComponent = document.getElementById("app-list-main")   
-      listComponent._tag.trigger("handleKey", _e)      
+      listComponent._tag.trigger("handleKey", _e) 
+
+      // TODO: Handle F(x) keys!
+
     })
 
 
