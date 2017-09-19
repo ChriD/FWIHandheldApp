@@ -1,6 +1,10 @@
 <app-footer>
   
-  <app-icon-fa class="left" id="viewBackIcon" name="fa-arrow-left"></app-icon-fa>
+  <div class="left">
+    <!--    
+      <app-icon-fa  id="viewBackIcon" name="fa-arrow-left"></app-icon-fa>
+    -->
+  </div>
   <div class="right">Connected to: { connectedToInfo }</div>
 
   <style>
@@ -18,6 +22,8 @@
 
     .left {
       float: left;
+      height: 100%;
+      font-size: 1.75em;
     }
   </style>
 

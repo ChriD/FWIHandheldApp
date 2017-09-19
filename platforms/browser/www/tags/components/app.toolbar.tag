@@ -21,7 +21,7 @@
     }
 
     .left {
-      float: left;
+      float: left;     
     }
 
     .busy {

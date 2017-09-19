@@ -22,7 +22,7 @@ class App extends AppBase
     init()
     {                
         var self = this
-        this.logger = new AppLogger()
+        this.logger = new AppLogger()        
 
         // add a global exception catcher
         window.addEventListener("error", function (e) {
@@ -34,6 +34,13 @@ class App extends AppBase
         riot.util.tmpl.errorHandler = function(_err) {
             self.logError(_err.message, _err)            
         }
+
+        // load the settings (async)
+        this.settings.loadSettings("APP").then(function(){
+            self.logDebug("Settings loaded")
+        }).catch(function(_exception){
+            self.logError("Loading settings failed: " + _exception.toString())
+        })
 
         // mount the visual layer
         riot.mount('app')

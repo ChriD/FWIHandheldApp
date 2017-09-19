@@ -6,6 +6,7 @@ class AppSettings
             driver:     [localforage.INDEXEDDB, localforage.WEBSQL, localforage.LOCALSTORAGE],
             name:       _appName        
           });
+        this.data = {}
     }
 
 
@@ -36,6 +37,7 @@ class AppSettings
             try
             {
                 self.storage.getItem(_settingsId).then(function(_settings){
+                    self.data[_settingsId] = _settings
                     _resolve(_settings)
                 }).catch(function(_exception) {
                     _reject(_exception)

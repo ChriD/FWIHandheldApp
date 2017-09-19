@@ -1,8 +1,14 @@
-<app-view-counting>
+<app-view-counting class="view">
   
-  <div>
-  Counting
+  <div class="view-content">
+    <div class="view-contentContainer">
+      Counting
+    </div>
   </div>
+  <div class="view-buttonrow buttonRow">
+    <button id="counting-button-next"    class="borderRight" style="width: 49%;">Weiter</button>
+    <button id="counting-button-cancel"  class=""            style="width: 49%;">Abbrechen</button>
+  </div>   
 
   <style>  
   </style>
@@ -14,6 +20,14 @@
     this.on('mount', () => {      
       if(self.opts.mountedCallback)
         self.opts.mountedCallback();
+
+      document.getElementById("counting-button-next").onclick = function(){               
+      }  
+      
+      document.getElementById("counting-button-cancel").onclick = function(){                        
+        app.getMainViewContainer().showPrevView();
+      } 
+
     })
 
     this.on('handleKey', (_e) => {      
