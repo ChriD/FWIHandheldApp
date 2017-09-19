@@ -95,8 +95,12 @@
               self.showPrevView();
             }
           }
-        }            
-      }, false)
+        }  
+
+        if ( !_e.metaKey && _e.isPropagationStopped) 
+          _e.preventDefault()
+
+      }, false)          
     }
 
   </script>

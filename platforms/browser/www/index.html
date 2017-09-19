@@ -67,6 +67,25 @@
       var app = new AppHandheld_Moser()
       app.init()
 
+ 
+      document.addEventListener("backbutton", function () { 
+          navigator.notification.confirm(
+              'Beenden?', 
+              onConfirmQuit, 
+              'QUIT TITLE', 
+              'Ja,Nein'  
+          );
+      }, true); 
+  
+  
+      function onConfirmQuit(button){
+          if(button == "1"){
+              navigator.app.exitApp(); 
+          }
+      }
+   
+    
+
       // after initialization the splash screen is shown, after a few seconds we hide the splash screen 
       setTimeout(function(){    
         app.hideSplashScreen()

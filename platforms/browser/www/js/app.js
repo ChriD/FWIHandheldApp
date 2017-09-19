@@ -16,7 +16,7 @@ class App extends AppBase
 
     name()
     {
-        return "Moser Handheld"
+        return "App"
     }
 
     init()
@@ -53,14 +53,14 @@ class App extends AppBase
     changeView(_viewContainerId, _viewId)
     {
         var component = document.getElementById(_viewContainerId)
-        component._tag.changeView(_viewId);
+        component._tag.changeView(_viewId)
     }
 
 
     getViewContainer(_viewContainerId)
     {
         var component = document.getElementById(_viewContainerId)
-        return component._tag;
+        return component._tag
     }
 
     
@@ -73,7 +73,7 @@ class App extends AppBase
     getView(_viewId)
     {
         var component = document.getElementById(_viewId)
-        return component._tag.getViewTag();
+        return component._tag.getViewTag()
     }
 
 
@@ -84,7 +84,7 @@ class App extends AppBase
 
     exitApp()
     {
-        navigator.app.exitApp();
+        navigator.app.exitApp()
     }
 
 }

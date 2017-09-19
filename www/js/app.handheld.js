@@ -6,7 +6,6 @@ class AppHandheld extends App
     { 
         super()
     }
-    
 
     /**
      * return the toolbar tag          

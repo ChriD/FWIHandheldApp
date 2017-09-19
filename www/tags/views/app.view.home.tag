@@ -38,7 +38,16 @@
       var listComponent = document.getElementById("app-list-main")   
       listComponent._tag.trigger("handleKey", _e) 
 
-      // TODO: Handle F(x) keys!
+      if(!_e.isPropagationStopped)
+      {
+        // Handle F(x) keys!
+        if(_e.keyCode == 112) app.changeAppView("app-view-counting")      // F1
+        if(_e.keyCode == 113) app.changeAppView("app-view-iteminfo")      // F2
+        if(_e.keyCode == 122) app.changeAppView("app-view-appsettings")   // F11
+        if(_e.keyCode == 123) app.exitApp();                              // F12
+      }
+      
+      _e.isPropagationStopped = true
 
     })
 
