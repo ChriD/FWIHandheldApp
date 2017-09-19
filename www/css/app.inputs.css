@@ -1,27 +1,40 @@
 /* */
 
-input {
+input, select {
     display: block;
     margin: 0;
     width: 100%;     
     appearance: none;
     box-shadow: none;
-    border-radius: none;
-    font-family: 'segoe ui', arial, sans-serif;     
+    border-radius: none;      
     font-size: 1em;
+
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    text-indent: 1px;
+    text-overflow: '';
   }
-  input:focus {
+
+input:focus, select:focus {
     outline: none;
-  }
+}
 
-
-input {
-    padding: 10px;
+input, select {
+    box-sizing: border-box;
+    padding: 0.15em;
     border: none;
     border-bottom: solid 0.25em #c9c9c9;
     transition: border 0.3s;
   }
+
 input:focus,
-input.focus {
+input.focus,
+select:focus,
+select.focus {
     border-bottom: solid 0.25em rgb(238,114,3);
   }
+
+select option {
+  font-size: 0.5em;
+}
+

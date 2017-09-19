@@ -1,9 +1,13 @@
 /* */
 
 .buttonRow {    
-    width: 100%;
-    background-color: green;
-    border-top: solid 0.15em #FFFFFF;
+    width: 100%;    
+    border-top: solid 0.10em #FFFFFF;
+}
+
+.buttonRow .borderRight{    
+  height: 100%;    
+  border-right: solid 0.10em #FFFFFF;
 }
 
 .buttonRow button {
@@ -12,14 +16,19 @@
     border: 0px;
     font-size: 1em;
     padding: 0.5em;
+    height: 100%;
+    border-bottom: solid 0.15em rgba(0,0,0,0);
+    outline: none;
   }
+
 .buttonRow button:hover,
-.buttonRow button.hover {
-    border-color: rgb(238,114,3);
+.buttonRow button.hover { 
     color: rgb(238,114,3);
+    border-bottom: solid 0.15em rgb(238,114,3);
   }
+
 .buttonRow button:active,
-.buttonRow button.active {
-    border-color: rgb(238,114,3);
+.buttonRow button.active {    
     color: rgb(238,114,3);
+    border-bottom: solid 0.15em rgb(238,114,3);
   }
