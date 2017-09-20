@@ -5,7 +5,11 @@
   <app-clock class="right"></app-clock>    
   <app-icon-fa-battery class="right"></app-icon-fa-battery>
   -->
-  <app-icon-fa class="right busy" name="fa-hourglass"></app-icon-fa>
+
+  <!--<app-icon-fa class="right busy" name="fa-hourglass"></app-icon-fa>-->
+  <div class="right busy">
+    <i class="fa fa-spinner fa-pulse fa-fw"></i>
+  </div>
 
   <style>
     :scope {
@@ -50,7 +54,7 @@
       var busyElement = self.getBusyElement();
       if(busyElement)
       {
-        busyElement._tag.spin(_busy)
+        //busyElement._tag.spin(_busy)
         if(!_busy)
           busyElement.style.display = 'none'
         else

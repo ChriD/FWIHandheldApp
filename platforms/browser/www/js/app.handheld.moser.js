@@ -5,6 +5,7 @@ class AppHandheld_Moser extends AppHandheld
     constructor() 
     { 
         super()
+        this.sageX3Connector = null;
     }
 
     additionalLogIdentifier()
@@ -15,7 +16,20 @@ class AppHandheld_Moser extends AppHandheld
     init()
     {                
         super.init()
+
+        document.addEventListener("SageX3ConnectorJS.Log", this.x3ConnectorLog)
+        document.addEventListener("SageX3ConnectorJS.ConnectionStateChanged", this.x3ConnectorStateChanged)
+
+        this.sageX3Connector = new SageX3Connector()        
     }
+
+    connectToBackend()
+    {
+        this.setBusy(true);
+        app.getFooter().setConnectedToInfo(true, "Verbinde zu X3...")
+        this.x3ConnectorConnect()
+    }
+
 
     setMainMenuData(_listData)
     {
@@ -29,6 +43,39 @@ class AppHandheld_Moser extends AppHandheld
         this.changeView("app-appViews", _viewId) 
     }  
     
+
+
+	x3ConnectorConnect()
+	{        
+		if(!this.sageX3Connector.init(app.getAppSettings().X3_URL, app.getAppSettings().X3_POOLID, app.getAppSettings().X3_USER, app.getAppSettings().X3_PASS, app.getAppSettings().X3_LANG))
+            this.logError("Fehler beim initialisieren der X3 Verbindung!");		
+	}
+		
+
+	x3ConnectorStateChanged(_data)
+	{	
+        if(_data.detail.connected)   
+        {     
+            app.setBusy(false);
+            app.getFooter().setConnectedToInfo(true, "Verbunden mit: " + app.getAppSettings().X3_POOLID)
+        }
+        else
+        {
+            app.setBusy(true);
+            app.getFooter().setConnectedToInfo(false, "Keine Verbindung!")
+        }
+    }
+    
+
+    x3ConnectorLog(_e)
+    {        
+        if (_e.logType === 0) app.logDebug(_e.logText)
+        if (_e.logType === 1) app.logInfo(_e.logText)
+        if (_e.logType === 2) app.logWarning(_e.logText)
+        if (_e.logType === 3) app.logError(_e.logText)
+        if (_e.logType === 4) app.logError(_e.logText)
+    }  
+
 
     /*
     setSystemOnline(_online)

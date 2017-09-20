@@ -1,6 +1,10 @@
 <!doctype html>
 <html>
   <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>   
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />  
+    <!--<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height , target-densitydpi=device-dpi" />-->
+
     <title>FWI Handheld</title>    
     <link rel="stylesheet" href="css/app.fonts.css">    
     <link rel="stylesheet" href="css/app.vars.css">
@@ -11,8 +15,7 @@
     <link rel="stylesheet" href="css/app.buttons.css">
     <link rel="stylesheet" href="css/app.views.animations.css">
     <link rel="stylesheet" href="css/font-awesome.min.css">    
-  </head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/> 
+  </head> 
 
   <body>
     <app>      
@@ -53,6 +56,10 @@
     <!-- Vendor -->
     <script type="text/javascript" src="js/db/localforage.min.js"></script>
 
+    <!-- X3 -->
+    <script type="text/javascript" src="js/x3/sageX3Connector.js"></script>
+    <script type="text/javascript" src="js/x3/sageX3Connector.picking.js"></script>
+
     <!-- App -->    
     <script type="text/javascript" src="js/app.logger.js"></script>
     <script type="text/javascript" src="js/app.tools.js"></script>
@@ -67,7 +74,7 @@
       var app = new AppHandheld_Moser()
       app.init()
 
- 
+      /*
       document.addEventListener("backbutton", function () { 
           navigator.notification.confirm(
               'Beenden?', 
@@ -82,7 +89,7 @@
           if(button == "1"){
               navigator.app.exitApp(); 
           }
-      }
+      }*/
    
     
 

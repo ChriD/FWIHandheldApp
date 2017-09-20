@@ -7,8 +7,7 @@
       display: block;
     }
 
-    .spinColor {
-      color: red;
+    .spinColor {    
     }
   </style>
 

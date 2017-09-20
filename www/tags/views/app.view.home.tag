@@ -1,5 +1,5 @@
 <app-view-home>
-
+  
   <app-list menuitemtag="app-list-menuitem" id="app-list-main"></app-list>
   
   <style>      

@@ -7,10 +7,10 @@
     <author email="support@phonegap.com" href="http://phonegap.com">
         PhoneGap Team
     </author>
-	<preference name="Fullscreen" value="true" />
+    <preference name="Fullscreen" value="true" />
     <content src="index.html" />
     <access origin="*" />
-    <engine name="android" spec="~6.2.3" />    
+    <engine name="android" spec="~6.2.3" />
     <plugin name="cordova-plugin-crosswalk-webview" spec="^2.3.0">
         <variable name="XWALK_VERSION" value="23+" />
         <variable name="XWALK_LITEVERSION" value="xwalk_core_library_canary:17+" />

@@ -1,0 +1,5 @@
+chrome://inspect/#devices
+
+https://stackoverflow.com/questions/26449512/how-to-create-a-signed-apk-file-using-cordova-command-line-interface
+
+https://stackoverflow.com/questions/20402818/build-android-release-apk-on-phonegap-3-x-cli

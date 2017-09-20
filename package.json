@@ -1,24 +1,24 @@
 {
-  "name": "com.fwi.handheld",
-  "version": "0.0.1",
-  "displayName": "FWI-Handheld",
-  "cordova": {
-    "platforms": [
-      "android"
-    ],
-    "plugins": {
-      "cordova-plugin-crosswalk-webview": {
-        "XWALK_VERSION": "23+",
-        "XWALK_LITEVERSION": "xwalk_core_library_canary:17+",
-        "XWALK_COMMANDLINE": "--disable-pull-to-refresh-effect",
-        "XWALK_MODE": "embedded",
-        "XWALK_MULTIPLEAPK": "true"
-      }
+    "name": "com.fwi.handheld",
+    "version": "0.0.1",
+    "displayName": "FWI-Handheld",
+    "cordova": {
+        "platforms": [
+            "android"
+        ],
+        "plugins": {
+            "cordova-plugin-crosswalk-webview": {
+                "XWALK_VERSION": "23+",
+                "XWALK_LITEVERSION": "xwalk_core_library_canary:17+",
+                "XWALK_COMMANDLINE": "--disable-pull-to-refresh-effect",
+                "XWALK_MODE": "embedded",
+                "XWALK_MULTIPLEAPK": "true"
+            }
+        }
+    },
+    "dependencies": {
+        "cordova-android": "~6.2.3",
+        "cordova-plugin-crosswalk-webview": "^2.3.0",
+        "cordova-plugin-fullscreen": "^1.2.0"
     }
-  },
-  "dependencies": {
-    "cordova-android": "~6.2.3",
-    "cordova-plugin-crosswalk-webview": "^2.3.0",
-    "cordova-plugin-fullscreen": "^1.2.0"
-  }
 }

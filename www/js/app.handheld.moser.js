@@ -46,7 +46,7 @@ class AppHandheld_Moser extends AppHandheld
 
 
 	x3ConnectorConnect()
-	{
+	{        
 		if(!this.sageX3Connector.init(app.getAppSettings().X3_URL, app.getAppSettings().X3_POOLID, app.getAppSettings().X3_USER, app.getAppSettings().X3_PASS, app.getAppSettings().X3_LANG))
             this.logError("Fehler beim initialisieren der X3 Verbindung!");		
 	}

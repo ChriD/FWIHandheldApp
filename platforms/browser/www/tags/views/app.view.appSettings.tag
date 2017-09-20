@@ -106,7 +106,12 @@
         {
           app.tools.getInputDataObject(document.getElementById("appSettings-settings")).then(function(_inputData){
             app.settings.saveSettings("APP", app.tools.inputDataObjectToStorageObject(_inputData)).then(function(){
-              _resolve()
+              app.settings.loadSettings("APP").then(function(_settingsData){                
+                app.connectToBackend()
+                _resolve()
+              }).catch(function(_exception){
+                _reject(_exception)
+              })                                   
             }).catch(function(_exception){
               _reject(_exception)
             });            

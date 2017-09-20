@@ -101,7 +101,7 @@
           self.root.appendChild(tagElement) 
           //var el = document.getElementById(self.opts.id + "_X")
           //el.appendChild(tagElement);
-          self.setAnimations();
+          self.setAnimations(); // @@ problems on mobile!!!???
           _resolve();
         } 
 

@@ -22,6 +22,8 @@ class App extends AppBase
 
     getAppSettings()
     {
+        if(!this.settings.data.APP)
+            this.settings.data.APP = {}
         return this.settings.data.APP
     }
 

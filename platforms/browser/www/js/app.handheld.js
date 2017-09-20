@@ -19,6 +19,17 @@ class AppHandheld extends App
     }
 
     /**
+     * return the footer tag          
+     */
+    getFooter()
+    {
+        var component = document.getElementById("app-footer")
+        if(component)
+            return component._tag;
+        return null;
+    }
+
+    /**
      * show the splashscreen of the application           
      */
     showSplashScreen()
