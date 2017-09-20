@@ -13,7 +13,7 @@
       
     </div>        
   </div>
-  <app-footer class="app-statusbar"></app-footer>
+  <app-footer id="app-footer" class="app-statusbar"></app-footer>
 
   <style> 
     :scope {
@@ -39,6 +39,8 @@
       app.getViewContainer("app-appViews").on('changeView', (_viewId) => {              
         app.getToolbar().setText(app.getView(_viewId).name())
       })  
+
+      app.connectToBackend()
 
     })  
    

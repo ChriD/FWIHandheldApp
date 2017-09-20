@@ -53,6 +53,10 @@
     <!-- Vendor -->
     <script type="text/javascript" src="js/db/localforage.min.js"></script>
 
+    <!-- X3 -->
+    <script type="text/javascript" src="js/x3/sageX3Connector.js"></script>
+    <script type="text/javascript" src="js/x3/sageX3Connector.picking.js"></script>
+
     <!-- App -->    
     <script type="text/javascript" src="js/app.logger.js"></script>
     <script type="text/javascript" src="js/app.tools.js"></script>
@@ -67,7 +71,7 @@
       var app = new AppHandheld_Moser()
       app.init()
 
- 
+      
       document.addEventListener("backbutton", function () { 
           navigator.notification.confirm(
               'Beenden?', 

@@ -19,6 +19,12 @@ class App extends AppBase
         return "App"
     }
 
+
+    getAppSettings()
+    {
+        return this.settings.data.APP
+    }
+
     init()
     {                
         var self = this
