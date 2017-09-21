@@ -12,6 +12,9 @@
         },
         "cordova-plugin-splashscreen": {
             "PACKAGE_NAME": "com.fwi.sagemobile"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "com.fwi.sagemobile"
         }
     },
     "dependent_plugins": {}

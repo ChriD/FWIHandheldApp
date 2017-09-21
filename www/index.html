@@ -19,7 +19,7 @@
 
   <body>
     <app>      
-      <app-views id="appMainViews" currentViewId="app-view-splash" animation="fade">
+      <app-views id="appMainViews" currentViewId="app-view-app" animation="fade">
         <!-- the splash screen should be on the top level view container and will be shown on startup only-->
         <app-view viewTag="app-view-splash" id="app-view-splash"></app-view>   
         <!-- the app view will hold the header, footer and other stuff and will serve all other views -->
@@ -55,6 +55,10 @@
 
     <!-- Vendor -->
     <script type="text/javascript" src="js/db/localforage.min.js"></script>
+    <!-- Unfortunately i need jquery currently for (I'll try to remove the dependencies tough):
+        * ajax request in sagex3Connector.js
+    -->
+    <script type="text/javascript" src="js/jquery/jquery-3.1.1.min.js"></script> 	
 
     <!-- X3 -->
     <script type="text/javascript" src="js/x3/sageX3Connector.js"></script>
@@ -94,9 +98,9 @@
     
 
       // after initialization the splash screen is shown, after a few seconds we hide the splash screen 
-      setTimeout(function(){    
-        app.hideSplashScreen()
-      },1000) 
+      //setTimeout(function(){    
+      //  app.hideSplashScreen()
+      //},1000) 
 
       /*
       setTimeout(function(){    

@@ -23,6 +23,11 @@ class AppHandheld_Moser extends AppHandheld
         this.sageX3Connector = new SageX3Connector()        
     }
 
+    appSettingsLoaded()
+    {
+        this.x3ConnectorConnect()
+    }
+
     connectToBackend()
     {
         this.setBusy(true);

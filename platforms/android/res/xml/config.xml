@@ -4,15 +4,40 @@
         <param name="android-package" value="org.apache.cordova.splashscreen.SplashScreen" />
         <param name="onload" value="true" />
     </feature>
+    <feature name="Whitelist">
+        <param name="android-package" value="org.apache.cordova.whitelist.WhitelistPlugin" />
+        <param name="onload" value="true" />
+    </feature>
     <name>FWI-X3Mobile</name>
     <description>
         FWI X3 Mobile App
     </description>
-    <author email="support@phonegap.com" href="http://phonegap.com">
-        PhoneGap Team
+    <author email="support-ax@fwi-group.com" href="http://www.fwi-group.com">
+        FWI Information Technology
     </author>
     <content src="index.html" />
     <access origin="*" />
+    <allow-intent href="*" />
+    <allow-navigation href="*" />
+    <splash density="land-hdpi" src="res/splash/android/splash_p800.png" />
+    <splash density="land-ldpi" src="res/splash/android/splash_p800.png" />
+    <splash density="land-mdpi" src="res/splash/android/splash_p800.png" />
+    <splash density="land-xhdpi" src="res/splash/android/splash_p1280.png" />
+    <splash density="land-xxhdpi" src="res/splash/android/splash_p1600.png" />
+    <splash density="land-xxxhdpi" src="res/splash/android/splash_p1920.png" />
+    <splash density="port-hdpi" src="res/splash/android/splash_p800.png" />
+    <splash density="port-ldpi" src="res/splash/android/splash_p800.png" />
+    <splash density="port-mdpi" src="res/splash/android/splash_p800.png" />
+    <splash density="port-xhdpi" src="res/splash/android/splash_p1280.png" />
+    <splash density="port-xxhdpi" src="res/splash/android/splash_p1600.png" />
+    <splash density="port-xxxhdpi" src="res/splash/android/splash_p1920.png" />
+    <icon density="ldpi" src="res/icon/android/icon_36.png" />
+    <icon density="tvdpi" src="res/icon/android/icon_48.png" />
+    <icon density="mdpi" src="res/icon/android/icon_64.png" />
+    <icon density="hdpi" src="res/icon/android/icon_72.png" />
+    <icon density="xhdpi" src="res/icon/android/icon_96.png" />
+    <icon density="xxhdpi" src="res/icon/android/icon_144.png" />
+    <icon density="xxxhdpi" src="res/icon/android/icon_192.png" />
     <preference name="loglevel" value="DEBUG" />
     <preference name="webView" value="org.crosswalk.engine.XWalkWebViewEngine" />
     <preference name="xwalkVersion" value="23+" />
@@ -22,4 +47,10 @@
     <preference name="xwalkMultipleApk" value="true" />
     <preference name="android-minSdkVersion" value="16" />
     <preference name="Fullscreen" value="true" />
+    <preference name="AutoHideSplashScreen" value="true" />
+    <preference name="SplashScreenDelay" value="3000" />
+    <preference name="SplashMaintainAspectRatio" value="true" />
+    <preference name="SplashShowOnlyFirstTime" value="false" />
+    <preference name="FadeSplashScreen" value="true" />
+    <preference name="FadeSplashScreenDuration" value="750" />
 </widget>

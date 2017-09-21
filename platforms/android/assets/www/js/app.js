@@ -44,8 +44,9 @@ class App extends AppBase
         }
 
         // load the settings (async)
-        this.settings.loadSettings("APP").then(function(){
-            self.logDebug("Settings loaded")
+        this.settings.loadSettings("APP").then(function(){            
+            self.logDebug("Settings loaded")      
+            self.appSettingsLoaded();      
         }).catch(function(_exception){
             self.logError("Loading settings failed: " + _exception.toString())
         })
@@ -57,6 +58,12 @@ class App extends AppBase
 
         this.logDebug("Initialize app")               
     }
+
+
+    appSettingsLoaded()
+    {
+    }
+
 
     changeView(_viewContainerId, _viewId)
     {

@@ -280,8 +280,13 @@ class SageX3Connector
     {
         if(typeof(_params.type) === 'undefined')            _params.type = "GET"
         if(typeof(_params.async) === 'undefined')           _params.async = true  
-        if(typeof(_params.contentType) === 'undefined')     _params.contentType = "text/xml"          
-
+        if(typeof(_params.contentType) === 'undefined')     _params.contentType = "text/xml" 
+        
+        // # jquery
+        $.ajax(_params);
+        
+        // # vanilla js
+        /*
         var request = new XMLHttpRequest();
         request.open(_params.type, _params.url, _params.async)
         
@@ -308,6 +313,7 @@ class SageX3Connector
             _params.beforeSend(request)
         
         request.send(_params.data);
+        */
 
         /*        
         cache: false,        
@@ -521,8 +527,12 @@ class SageX3Connector
     {
         return function(_data) 
         {
+            var xmlDoc;
             // generate an xml document from the response string
-            var xmlDoc = new window.DOMParser().parseFromString(_data, "text/xml");
+            if(typeof(_data) === 'object' &&  _data.constructor.name == 'XMLDocument')  
+                xmlDoc = _data
+            else
+                xmlDoc = new window.DOMParser().parseFromString(_data, "text/xml");                        
 
             _sageX3Connector.logDebug("SOAP Request response: " + _requestId);                        
                  
