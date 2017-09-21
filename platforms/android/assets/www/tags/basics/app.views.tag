@@ -24,6 +24,13 @@
     })
 
 
+    this.on('action', (_data) => {      
+      var viewElement = document.getElementById(self.currentViewId)        
+      if(viewElement)
+        viewElement._tag.trigger("action", _data)    
+    })
+
+
     getFirstViewElementId() {
         // TODO: @@@
       return "";

@@ -33,13 +33,18 @@
       // reroute to "real" tag view      
       self.root.firstChild._tag.trigger("handleKey", _e)      
     })
-
+    
     
     this.on('requestPrevViewId', (_args) => {      
       // reroute to "real" tag view      
       self.root.firstChild._tag.trigger("requestPrevViewId", _args)      
     })    
 
+
+    this.on('action', (_data) => {      
+      // reroute to "real" tag view      
+      self.root.firstChild._tag.trigger("action", _data)      
+    })
 
 
     setAnimations() 

@@ -1,7 +1,7 @@
 <app-view-itemInfo class="view">
   
    <div class="view-content">
-      <div class="view-contentContainer">
+      <div id="iteminfo_container" class="view-contentContainer">
         ItemInfo
       </div>
     </div>
@@ -30,13 +30,31 @@
 
     })
 
+
     this.on('handleKey', (_e) => {      
       console.log("handleKey trigger 2")
     })   
 
+
     this.on('requestPrevViewId', (_args) => {       
       _args.viewId  = "app-view-home"
     })  
+
+
+    this.on('action', (_e) => {      
+      if(_e.action == "barcodeReady")
+      {
+        self.barcodeReady(_e.data);
+      }    
+    })
+
+    barcodeReady(_data)
+    {      
+      var newNode = document.createElement('div');    
+      newNode.innerHTML = _data.value;  
+      document.getElementById("iteminfo_container").appendChild(newNode);      
+    }
+
 
     name(){
       return "Artikelinfo" // LABEL

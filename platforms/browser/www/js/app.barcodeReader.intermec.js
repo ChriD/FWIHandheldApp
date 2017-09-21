@@ -102,8 +102,8 @@ class AppBarcodeReader_Intermec extends AppBarcodeReader
         return function(_data, _type, _time)
         {
             self.logDebug("Barcode scanned: " + _type +  " -> " + _data)
-            var event = new CustomEvent("BarcodeReader.dataReady", { detail: { "type" : _type,
-                                                                               "data" : _data}
+            var event = new CustomEvent("BarcodeReader.dataReady", { detail: { "type"   : _type,
+                                                                               "value" : _data}
                                                                    })
             document.dispatchEvent(event);            
         }

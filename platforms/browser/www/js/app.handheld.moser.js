@@ -99,6 +99,7 @@ class AppHandheld_Moser extends AppHandheld
         {
             // TODO: dispatch barcode to current view
             self.logDebug("Barcode scanned: " + _data.toString())
+            self.getMainViewContainer().trigger("action", {action : "barcodeReady", data : _data.detail})            
         }
     }
 
