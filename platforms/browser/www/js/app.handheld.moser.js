@@ -25,6 +25,7 @@ class AppHandheld_Moser extends AppHandheld
         this.sageX3Connector    = new SageX3Connector()  
         this.barcodeReader      = new AppBarcodeReader_Intermec()        
         this.barcodeReader.parmLogger(this.parmLogger())
+        this.barcodeReader.init();
     }
 
     exitApp()

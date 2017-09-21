@@ -31,12 +31,12 @@ class AppBarcodeReader_Intermec extends AppBarcodeReader
             if (_result.status === 0)
             {
                 self.logDebug("BarcodeReader setup successfull")
-                self.barcodeReader.setBuffered("Symbology", "Code39", "Enable", "true", this.setBufferedComplete(self));
-                self.barcodeReader.setBuffered("Symbology", "Code128", "EnableCode128", "true", this.setBufferedComplete(self));
-                self.barcodeReader.commitBuffer(this.commitComplete(self));
+                self.barcodeReader.setBuffered("Symbology", "Code39", "Enable", "true", self.setBufferedComplete(self));
+                self.barcodeReader.setBuffered("Symbology", "Code128", "EnableCode128", "true", self.setBufferedComplete(self));
+                self.barcodeReader.commitBuffer(self.commitComplete(self));
 
                  // Add an event handler for the barcodedataready event
-                 self.barcodeReader.addEventListener("barcodedataready", this.barcodeDataReady(this), false); 
+                 self.barcodeReader.addEventListener("barcodedataready", self.barcodeDataReady(self), false); 
             }
             else
             {
