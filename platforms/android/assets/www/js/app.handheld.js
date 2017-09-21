@@ -4,7 +4,7 @@ class AppHandheld extends App
 {     
     constructor() 
     { 
-        super()
+        super()        
     }
 
     /**

@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<!--
+Title:   Print Label Sample
+Purpose: Demonstrates label printing API provided by the Honeywell Data
+         Collection Web API.
+Description:
+         This sample application prints two labels. One label prints an item label
+         with a Code 128 item number and the item name. The other label prints a
+         QRCode containing a URL and two optional lines of text. The label formats
+         are defined in the printer_profiles.JSON file. Please refer to the User
+         Guide for more information about the printer commands and attributes in
+         JSON format.
+         This sample uses the API provided in the Printer.js and printer settings
+         defined in printer_profiles.js. The standard printer_profiles.js includes
+         settings for multiple platforms. When you pass the printer_profiles variable
+         to the Printer constructor, it will select the proper settings depending
+         on the current platform. You may customize settings in the printer_profiles.js.
+
+         To run this demo application on a supported device:
+         1. Copy this file along with Printer.js and printer_profiles.js files
+            to the web server in the same location.
+         2. On the device, enable WiFi and join the same network of the web server.
+         3. On the device, enable Bluetooth for communicating with the Bluetooth printer.
+         4. On the device, open a supported web browser and enter the URL of this page.
+-->
+<html>
+<head>
+    <title>Print Label Sample</title>
+    <script type="text/javascript" src="Printer.js"></script>
+    <script type="text/javascript" src="printer_profiles.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script type="text/javascript">
+        var printer;
+        var progress_status;
+        var printer_select;
+        var printItemCheckbox;
+        var printURLCheckbox;
+        var printButton;
+        var labelCount = 0;
+        var labelCountPerPrint = 0;
+
+        /**
+         * Called during page load to initialize the application.
+         */
+        function setup ()
+        {
+            progress_status = document.getElementById("progress_status");
+            printer_select = document.getElementById("printer_select");
+            printItemCheckbox = document.getElementById("printItemCheckbox");
+            printURLCheckbox = document.getElementById("printURLCheckbox");
+            printButton = document.getElementById("printButton");
+        }
+
+        /**
+         * Invoked when one of the checkboxes is clicked.
+         */
+        function printCheckboxClicked()
+        {
+            labelCount = 0;
+            if (printItemCheckbox.checked)
+            {
+                labelCount++;
+            }
+            if (printURLCheckbox.checked)
+            {
+                labelCount++;
+            }
+
+            printButton.disabled = (labelCount == 0) ? true : false;
+        }
+
+        /**
+         * Invoked when the "Print" button is clicked. It creates a Printer object,
+         * connects to the printer, does the printing, and closes the printer
+         * connection. Because of the Printer methods are asynchronous, some
+         * operations are implemented in the method completion callbacks.
+         */
+        function printButtonClicked()
+        {
+            // Disables the Print button and the checkboxes during printing.
+            printButton.disabled = true;
+            printItemCheckbox.disabled = true;
+            printURLCheckbox.disabled = true;
+
+            // Clears the Progress and Status messages.
+            progress_status.innerHTML = "";
+
+            // Creates the Printer object.
+            var printerID = printer_select.options[printer_select.selectedIndex].value;
+            var printerMacAddr = document.getElementById("macAddrText").value;
+
+            progress_status.innerHTML += "Creating Printer object...<br>";
+
+            // Creates a Printer object with the printer_profiles variable, the selected
+            // printer ID (to identify the printer settings to use) and the specified
+            // printer Bluetooth MAC address.
+            // Note: The printer_profiles variable is defined in printer_profiles.js.
+            // It contains an array of settings for multiple platforms. The Printer
+            // constructor will select the settings for the current platform at runtime.
+            printer = new Printer(printer_profiles,
+                                  printerID,
+                                  "bt://" + printerMacAddr,
+                                  onPrinterObjectComplete);
+        }
+
+        function printLabel()
+        {
+            progress_status.innerHTML += "Printing " + labelCount + " label(s)...<br>";
+            labelCountPerPrint = labelCount;
+
+            if (printItemCheckbox.checked)
+            {
+                var format = "ItemLabel";  // Identifies a label definition in printer_profiles.JSON.
+                var data_ItemLabel = new Object();
+                data_ItemLabel["ItemName"] = document.getElementById("itemName").value;
+                data_ItemLabel["ItemNo"] = document.getElementById("itemNum").value;
+                printer.writeLabel(format, data_ItemLabel, onWriteLabelComplete);
+            }
+
+            if (printURLCheckbox.checked)
+            {
+                var format = "URL_QRLabel"; // Identifies a label definition in printer_profiles.JSON.
+                var data_URL_QRLabel = new Object();
+                data_URL_QRLabel["TextLine1"] = document.getElementById("textLine1").value;
+                data_URL_QRLabel["TextLine2"] = document.getElementById("textLine2").value;
+                data_URL_QRLabel["URL"] = document.getElementById("urlText").value;
+                printer.writeLabel(format, data_URL_QRLabel, onWriteLabelComplete);
+            }
+        }
+
+        function disconnectPrinter()
+        {
+            if (printer != null)
+            {
+                printer.disconnect(OnDisconnectComplete);
+            }
+        }
+
+        function closePrinter()
+        {
+            if (printer != null)
+            {
+                printer.close(onCloseComplete);
+            }
+        }
+
+        /**
+         * Asynchronous callback of the Printer constructor with the result of
+         * the object creation.
+         */
+        function onPrinterObjectComplete (result)
+        {
+            if (result.status == 0) // Successful
+            {
+                // Adds a print progress event listener.
+                printer.addEventListener("printprogress", onReceivePrintProgress, false);
+
+                progress_status.innerHTML += "Connecting to printer...<br>";
+                // Connects to the printer.
+                printer.connect(onConnectComplete);
+            }
+            else
+            {
+                printer.removeEventListener("printprogress", onReceivePrintProgress);
+                alert(result.message);
+                closePrinter();
+            }
+        }
+
+        /**
+         * Asynchronous callback of the Printer.connect method with the result
+         * of the printer connection.
+         */
+        function onConnectComplete (result)
+        {
+            if (result.status == 0) // Successful
+            {
+                printLabel();
+            }
+            else
+            {
+                printer.removeEventListener("printprogress", onReceivePrintProgress);
+                alert(result.message);
+                closePrinter();
+            }
+        }
+
+        /**
+         * Asynchronous callback of the Printer.writeLabel method with the result
+         * of the printing.
+         */
+        function onWriteLabelComplete (result)
+        {
+            labelCountPerPrint--;
+            if (result.status != 0)
+            {
+                alert("Failed to print label, " + result.message);
+            }
+            if (labelCountPerPrint == 0)
+            {
+                disconnectPrinter();
+            }
+        }
+
+        /**
+         * Asynchronous callback of the Printer.disconnect method with the result.
+         */
+        function OnDisconnectComplete (result)
+        {
+            closePrinter();
+        }
+
+        /**
+         * Asynchronous callback of the Printer.close method with the result.
+         */
+        function onCloseComplete (result)
+        {
+            printer = null;
+            // Enables the Print button and the checkboxes.
+            printButton.disabled = false;
+            printItemCheckbox.disabled = false;
+            printURLCheckbox.disabled = false;
+        }
+
+        /**
+         * Event listener of the "printprogress" events.
+         */
+        function onReceivePrintProgress (eventType)
+        {
+            switch (eventType)
+            {
+                case "cancelled":
+                    progress_status.innerHTML += "cancelled : Printing aborted.<br>";
+                    break;
+                case "completed":
+                    progress_status.innerHTML += "completed : Printing completed successfully.<br>";
+                    break;
+                case "docEnded":
+                    progress_status.innerHTML += "docEnded : Last line of document printed.<br>";
+                    break;
+                case "finished":
+                    progress_status.innerHTML += "finished : Printer connection closed.<br>";
+                    break;
+                case "docStarted":
+                    progress_status.innerHTML += "docStarted : Document printing has begun.<br>";
+                    break;
+                default:
+                    progress_status.innerHTML += "Other message: " + eventType + "<br>";
+                    break;
+            }
+        }
+    </script>
+</head>
+
+<body onload="setup();">
+    <div>
+        <table>
+            <tr>
+                <td>
+                    Select a Printer:
+                </td>
+                <td>
+                    <select id="printer_select">
+                        <option value="PB22_Fingerprint">PB22 BT Fingerprint</option>
+                        <option value="PB32_Fingerprint">PB32 BT Fingerprint</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    MAC Address:
+                </td>
+                <td>
+                    <input type="text" name="macAddrText" id="macAddrText" value="00:06:66:02:C3:BC" size=16/>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <hr>
+    <div>
+        <table>
+            <tr>
+                <td>
+                    Item Name:
+                </td>
+                <td>
+                    <input type="text" name="itemName" id="itemName" value="Honeywell AirGenius 4" size=18/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Item Number:
+                </td>
+                <td>
+                    <input type="text" name="itemNum" id="itemNum" value="92926003104" size=18/>
+                </td>
+            </tr>
+        </table>
+        <input type="checkbox" id="printItemCheckbox" onclick="printCheckboxClicked()">Print item label<br>
+    </div>
+
+    <div>
+        <table>
+            <tr>
+                <td>
+                    URL:
+                </td>
+                <td>
+                    <input type="text" name="urlText" id="urlText" value="http://www.intermec.com/webdemo" size=24/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Line 1:
+                </td>
+                <td>
+                    <input type="text" name="textLine1" id="textLine1" value="Web Demo Apps" size=24/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Line 2:
+                </td>
+                <td>
+                    <input type="text" name="textLine2" id="textLine2" value="intermec.com/webdemo" size=24/>
+                </td>
+            </tr>
+        </table>
+        <input type="checkbox" id="printURLCheckbox" onclick="printCheckboxClicked()">Print URL label<br>
+    </div>
+
+    <input type="button" value="Print" id="printButton" onclick = "printButtonClicked()" disabled="true"/>
+
+    <h4>Progress and Status</h4>
+    <div id="progress_status"></div>
+</body>
+</html>

@@ -283,10 +283,10 @@ class SageX3Connector
         if(typeof(_params.contentType) === 'undefined')     _params.contentType = "text/xml" 
         
         // # jquery
-        $.ajax(_params);
+        //$.ajax(_params);
         
         // # vanilla js
-        /*
+        
         var request = new XMLHttpRequest();
         request.open(_params.type, _params.url, _params.async)
         
@@ -313,7 +313,7 @@ class SageX3Connector
             _params.beforeSend(request)
         
         request.send(_params.data);
-        */
+        
 
         /*        
         cache: false,        

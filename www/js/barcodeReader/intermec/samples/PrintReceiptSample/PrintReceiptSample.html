@@ -1,0 +1,583 @@
+<!--
+Title: Receipt Sample
+Purpose: Demonstrates receipt printing API provided by the Honeywell Data Collection Web API.
+Description:
+        This sample application prints a receipt containing the 'purchasers' signature. Please
+        refer to the User Guide for more information about the printer commands and attributes.
+
+         This sample uses the API provided in the Printer.js and printer settings
+         defined in printer_profiles.js. The standard printer_profiles.js includes
+         settings for multiple platforms. When you pass the printer_profiles variable
+         to the Printer constructor, it will select the proper settings depending
+         on the current platform. You may customize settings in the printer_profiles.js.
+
+        To run this demo application on a supported device:
+        1. Copy this file along with Printer.js, honeywell_logo.bmp, and printer_profiles.js
+           files to the web server in the same location.
+        2. On the device, enable WiFi and join the same network of the web server.
+        3. On the device, enable Bluetooth for communicating with the Bluetooth printer.
+        4. On the device, open a supported web browser and enter the URL of this page.
+ -->
+
+<html>
+    <head>
+        <title>Receipt Sample</title>
+        <script type="text/javascript" src="Printer.js"></script>
+        <script type="text/javascript" src="printer_profiles.js"></script>
+        <style type="text/css">
+            div {
+                margin-left: auto;
+                margin-right: auto;
+                margin-top: 10px;
+                margin-bottom: 10px;
+                text-align:center;
+            }
+        </style>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script type="text/javascript">
+
+        // Initialize Global Variables
+        var signatureCanvas;
+        var log;
+
+        /**
+         * Called during page load to initialize the application.
+         */
+        function setup()
+        {
+            // Disable the buttons
+            disableButtons(true);
+
+            // Setup the log div
+            log = document.getElementById("log");
+
+            //Create and then initialize signature canvas
+            var canvas = document.getElementById("signature");
+            signatureCanvas = initSignatureCapture(canvas, 300, 150, "#EEEEEE", null);
+        };
+
+        /**
+         * Called once the user starts drawing on the canvas
+         */
+        function startedDrawing()
+        {
+            // Enable Print and Clear Buttons
+            disableButtons(false);
+        };
+
+        /**
+         * Clears the signature on the canvas
+         */
+        function clearSignature()
+        {
+            // Clear the Canvas
+            signatureCanvas.clear();
+
+            // Disable Print and Clear Buttons
+            disableButtons(true);
+        };
+
+        /**
+         * Change the state of the print and clear buttons
+         */
+        function disableButtons(state)
+        {
+            document.getElementById("ptrButton").disabled = state;
+            document.getElementById("clearButton").disabled = state;
+        };
+
+        /**
+         * Initialize the signature capture canvas
+         */
+        function initSignatureCapture(canvasElement, width, height, fillColor, lineColor)
+        {
+            var canvas = {};
+            canvas.node = canvasElement;
+            canvas.context = canvas.node.getContext('2d');
+
+            if (width != null)
+            {
+                canvas.node.width = width;
+            }
+            if (height != null)
+            {
+                canvas.node.height = height;
+            }
+
+            var ctx = canvas.context;
+            var lastPoint = null;
+
+            // Set Line color
+            ctx.strokeStyle = lineColor || "#000";
+            ctx.lineWidth = 5;
+
+            // Clear Background with fill color
+            ctx.fillStyle = fillColor || "#fff";
+
+            canvas.clear = function()
+            {
+                ctx.beginPath();
+                ctx.fillRect(0, 0, canvas.node.width, canvas.node.height);
+            }
+
+            canvas.clear();
+
+            canvas.parsePoint = function(e)
+            {
+                var point = {x:0,y:0};
+
+                if(e.changedTouches && e.changedTouches[0])
+                {
+                    point.x = e.changedTouches[0].pageX-(canvas.node.offsetLeft||0);
+                    point.y = e.changedTouches[0].pageY-(canvas.node.offsetTop||0);
+                }
+                else if(e.pageX||0==e.pageX)
+                {
+                    point.x = e.pageX - canvas.node.offsetLeft;
+                    point.y = e.pageY - canvas.node.offsetTop;
+                }
+
+                return point;
+            };
+
+            // Bind mouse events
+            canvas.node.onmousemove = function(e)
+            {
+                e.preventDefault();
+                e.stopPropagation();
+
+                // Only draw when mouse is down
+                if (canvas.isDrawing)
+                {
+                    var point = canvas.parsePoint(e);
+
+                    // If this is the first point, don't draw
+                    if (lastPoint != null)
+                    {
+                        // Draw from last point to current point.
+                        ctx.lineTo(lastPoint.X, lastPoint.Y, point.x, point.y);
+                        //ctx.lineTo(lastPoint.X, lastPoint.Y, point.x, point.y);
+                        ctx.stroke();
+                    }
+
+                    // Save the last point (even if it's the first point, too)
+                    lastPoint = new Object();
+                    lastPoint.X = point.x;
+                    lastPoint.Y = point.y;
+
+                    // Leave a way for the caller to tell if the user has started drawing
+                    canvas.hasInk = true;
+                    canvas.node.hasInk = true;
+                }
+            };
+
+            // If the mouse is clicked, start drawing and restart the line
+            canvas.node.onmousedown = function(e)
+            {
+                e.preventDefault();
+                e.stopPropagation();
+
+                canvas.isDrawing = true;
+                lastPoint = canvas.parsePoint(e);
+                ctx.beginPath();
+                ctx.moveTo(lastPoint.x , lastPoint.y );
+
+                startedDrawing();
+            };
+
+            // If the mouse button is up or the mouse leaves the
+            // canvas, stop drawing
+            canvas.node.onmouseup = function(e)
+            {
+                canvas.isDrawing = false;
+            };
+            canvas.node.onmouseout = function(e)
+            {
+                canvas.isDrawing = false;
+            };
+
+            canvas.node.ontouchstart = canvas.node.onmousedown;
+            canvas.node.ontouchmove = canvas.node.onmousemove;
+            canvas.node.ontouchend = canvas.node.onmouseup;
+
+            return canvas;
+        };
+
+        /**
+         * Sets up and then triggers printing of a receipt
+         */
+        function printButtonClicked()
+        {
+            // Clears the Progress and Status messages.
+            log.innerHTML = "";
+
+            var printerName = document.getElementById("ptrName").value;
+            var printerMac = "bt://" + document.getElementById("ptrMac").value;
+            // Creates a Printer object with the printer_profiles variable, the selected
+            // printer ID (to identify the printer settings to use) and the specified
+            // printer Bluetooth MAC address.
+            // Note: The printer_profiles variable is defined in printer_profiles.js.
+            // It contains an array of settings for multiple platforms. The Printer
+            // constructor will select the settings for the current platform at runtime.
+            printer = new Printer(printer_profiles, printerName, printerMac, onPrinterObjectComplete);
+        };
+
+        /**
+         * Handles the actual printing of receipt
+         */
+        function printReceipt()
+        {
+            // Print receipt header
+            // Set font style to Bold + Double Wide + Double High
+            printer.set("Font", "Style", "Bold", "true", onSetComplete);
+            printer.set("Font", "Style", "DoubleWide", "true", onSetComplete);
+            printer.set("Font", "Style", "DoubleHigh", "true", onSetComplete);
+            printer.writeLine("SALES ORDER", onWriteComplete);
+            printer.set("Font", "Style", "DoubleWide", "false", onSetComplete);
+            printer.set("Font", "Style", "DoubleHigh", "false", onSetComplete);
+
+            //Set font style to Bold
+            printer.writeLine("CUSTOMER: Casual Step                ", onWriteComplete);
+            printer.set("Font", "Style", "Bold", "false", onSetComplete);
+
+            // Set font style to Compressed + Double High
+            printer.set("Font", "Style", "DoubleHigh", "true", onSetComplete);
+            printer.set("Font", "Style", "Compress", "true", onSetComplete);
+            printer.writeLine("DOCUMENT#: 1234567890                ", onWriteComplete);
+            printer.set("Font", "Style", "DoubleHigh", "false", onSetComplete);
+            printer.set("Font", "Style", "Compress", "false", onSetComplete);
+
+            // Print receipt body
+            // The following text shall be printed in Normal font style
+            printer.writeLine("PRD.  DESCRIPT.   PRC.  QTY.   NET.", onWriteComplete);
+            printer.writeLine("1501  Timer-Md1  13.15    1   13.15", onWriteComplete);
+            printer.writeLine("1502  Timer-Md2  13.15    3   39.45", onWriteComplete);
+            printer.writeLine("1503  Timer-Md3  13.15    2   26.30", onWriteComplete);
+            printer.writeLine("1504  Timer-Md4  13.15    4   52.60", onWriteComplete);
+            printer.writeLine("1505  Timer-Md5  13.15    5   65.75", onWriteComplete);
+            printer.writeLine("                       ----  ------", onWriteComplete);
+            printer.writeLine("              SUBTOTAL   15  197.25", onWriteComplete);
+            printer.newLine(1, onNewLineComplete);
+            printer.writeLine("          5% STATE TAX         9.86", onWriteComplete);
+            printer.newLine(1, onNewLineComplete);
+            printer.writeLine("                             ------", onWriteComplete);
+            printer.writeLine("           BALANCE DUE       207.11", onWriteComplete);
+            printer.newLine(1, onNewLineComplete);
+            printer.writeLine("PAYMENT TYPE: CASH", onWriteComplete);
+
+            // Print signature label
+            // Set font style to Bold + Double High
+            printer.set("Font", "Style", "Bold", "true", onSetComplete);
+            printer.set("Font", "Style", "DoubleHigh", "true", onSetComplete);
+            printer.writeLine(" SIGNATURE / STORE STAMP ", onWriteComplete);
+            printer.set("Font", "Style", "Bold", "false", onSetComplete);
+            printer.set("Font", "Style", "DoubleHigh", "false", onSetComplete);
+            printer.newLine(1, onNewLineComplete);
+
+            // Print actual signature
+            var imageStr;
+            var settings = new Object();
+            settings["Rotation"] = 0;
+            settings["XOffset"] = 42;
+            settings["Width"] = 300;
+            settings["Height"] = 150;
+            var canvas = document.getElementById("signature");
+            var ctx = canvas.getContext('2d');
+            monochrome(ctx,canvas); // Monochrome the canvas
+            imageStr = canvas.toDataURL(); // Convert canvas to base 64
+            imageStr = imageStr.replace("data:image/png;base64,", ""); // Trim header off of conversion
+            printer.writeGraphic(imageStr, settings, onWriteGraphicComplete);
+
+            //Print original
+            // Set font style to Bold
+            printer.newLine(1, onNewLineComplete);
+            printer.set("Font", "Style", "Bold", "true", onSetComplete);
+            printer.writeLine("          ORIGINAL        ", onWriteComplete);
+            printer.set("Font", "Style", "Bold", "false", onSetComplete);
+
+            // Print optional text if included
+            // The following text shall be printed in Normal font style
+            var optionalText = document.getElementById("optText").value;
+            if (optionalText != null && optionalText.length > 0)
+            {
+                printer.writeLine(optionalText, onWriteComplete);
+            }
+            printer.newLine(1, onNewLineComplete);
+
+            // Print barcode
+            var strSymbology;
+            var strData;
+            var settings = new Object();
+            strSymbology = "Code39";
+            strData = "1234567890";
+            settings["Size"] = parseInt("90");
+            settings["XOffset"] = parseInt("35");
+            printer.writeBarcode (strSymbology, strData, settings, onWriteBarcodeComplete);
+            printer.newLine(4, onNewLineComplete);
+
+            //Done Printing... Disconnect.
+            printer.disconnect(onDisconnectComplete);
+        };
+
+        /**
+         * Prints honeywell_logo.bmp from server
+         */
+        function printLogo()
+        {
+           var xmlhttp;
+           var graphicFile = "honeywell_logo.bmp";
+           if (window.XMLHttpRequest)
+           {// code for IE7+, Firefox, Chrome, Opera, Safari
+               xmlhttp=new XMLHttpRequest();
+           }
+           else
+           {
+               return;
+           }
+
+           xmlhttp.onreadystatechange=function()
+           {
+               if (xmlhttp.readyState==4)
+               {
+                   if (xmlhttp.status==200)
+                   {
+                       var arrayBuffer = xmlhttp.response;  // Note: not xmlhttp.responseText
+                       if (arrayBuffer)
+                       {
+                           var settings = new Object();
+                           var byteArray = new Uint8Array(arrayBuffer);
+                           var graphicStr = String.fromCharCode.apply(null, byteArray);
+                           var base64GraphicStr = window.btoa(graphicStr);
+                           settings["Rotation"] = 0;
+                           settings["XOffset"] = 46;
+                           settings["Width"] = 300;
+                           settings["Height"] = 56;
+
+                           //Print Logo
+                           printer.writeGraphic(base64GraphicStr, settings, onWriteGraphicComplete);
+
+                           //Print Receipt
+                           printReceipt();
+                       }
+                   }
+                   else
+                   {
+                       alert("Failed to get the graphic file.");
+                   }
+               }
+           }
+           xmlhttp.open("GET", graphicFile, true);
+           xmlhttp.responseType = "arraybuffer";
+           xmlhttp.send();
+        };
+
+        /**
+         * Turns canvas to monochrome. Monochrome is required by our printers.
+         */
+        function monochrome(context, canvas)
+        {
+            var imgData = context.getImageData(0, 0, canvas.width, canvas.height);
+            var pixels  = imgData.data;
+
+            //Convert to grayscale first...
+            for (var i = 0, n = pixels.length; i < n; i += 4)
+            {
+                 var grayscale = pixels[i] * .3 + pixels[i+1] * .59 + pixels[i+2] * .11;
+                 pixels[i  ] = grayscale;        // red
+                 pixels[i+1] = grayscale;        // green
+                 pixels[i+2] = grayscale;        // blue
+                 //pixels[i+3]                   // alpha
+            }
+
+            //Convert from grayscale to monochrome. Note: threshold controls conversion.
+            var threshold = 200;
+            for (var i = 0; i < imgData.data.length; i+=4) {
+                imgData.data[i] = imgData.data[i+1] = imgData.data[i+2] = imgData.data[i] > threshold ? 255 : 0;
+              }
+
+            //redraw the image in black & white
+            context.putImageData(imgData, 0, 0);
+        };
+
+        /**
+         * Asynchronous callback of the Printer constructor with the result of
+         * the object creation.
+         */
+        function onPrinterObjectComplete (result)
+        {
+            if (result.status == 0)
+            {
+                printer.addEventListener("printprogress", onReceivePrintProgress, false);
+                printer.connect(onConnectComplete);
+            }
+            else
+            {
+                printer.removeEventListener("printprogress", onReceivePrintProgress);
+                printer.close();
+                printer = null;
+                alert(result.message + ", status: " + result.status);
+            }
+        };
+
+        /**
+         * Asynchronous callback of the Printer.connect method with the result
+         * of the printer connection.
+         */
+        function onConnectComplete (result)
+        {
+            if (result.status == 0)
+            {
+                printLogo();
+            }
+            else
+            {
+                alert(result.message);
+                printer.disconnect(onDisconnectComplete);
+            }
+        };
+
+        /**
+         * Asynchronous callback of the Printer.write method with the result
+         * of the printing.
+         */
+        function onWriteComplete (result)
+        {
+            if (result.status !=0)
+            {
+                alert(result.message);
+                printer.disconnect(onDisconnectComplete);
+            }
+        };
+
+        /**
+         * Asynchronous callback of the Printer.set method with the result
+         * of the set.
+         */
+        function onSetComplete (result)
+        {
+            if (result.status !=0)
+            {
+                alert(result.message);
+                printer.disconnect(onDisconnectComplete);
+            }
+        };
+
+        /**
+         * Asynchronous callback of the Printer.newLine method with the result
+         * of the printing.
+         */
+        function onNewLineComplete (result)
+        {
+            if (result.status !=0)
+            {
+                alert(result.message);
+                printer.disconnect(onDisconnectComplete);
+            }
+        };
+
+        /**
+         * Asynchronous callback of the Printer.writeGraphic method with the result
+         * of the printing.
+         */
+        function onWriteGraphicComplete (result)
+        {
+            if (result.status !=0)
+            {
+                alert(result.message);
+                printer.disconnect(onDisconnectComplete);
+            }
+        };
+
+        /**
+         * Asynchronous callback of the Printer.writeBarcode method with the result
+         * of the printing.
+         */
+	    function onWriteBarcodeComplete (result)
+	    {
+	        if (result.status !=0)
+	        {
+	            alert(result.message);
+	            printer.disconnect(onDisconnectComplete);
+	        }
+	    };
+
+        /**
+         * Asynchronous callback of the Printer.disconnect method with the result.
+         */
+		function onDisconnectComplete (result)
+		{
+		    if (result.status == 0)
+		    {
+		        //Successful
+		        printer.close(onCloseComplete);
+		    }
+		    else
+		    {
+		        alert(result.message);
+		    }
+		};
+
+        /**
+         * Asynchronous callback of the Printer.close method with the result.
+         */
+		function onCloseComplete (result)
+		{
+		    if (result.status == 0)
+		    {
+		        //Successful
+		        clearSignature();
+		    }
+		    else
+		    {
+		        alert(result.message);
+		    }
+		};
+
+        /**
+         * Event listener of the "printprogress" events.
+         */
+        function onReceivePrintProgress (eventType)
+        {
+            switch (eventType)
+            {
+                case "cancelled":
+                    log.innerHTML += "<br>cancelled : Printing aborted.";
+                    break;
+                case "completed":
+                    log.innerHTML += "<br>completed : Printing completed successfully.";
+                    break;
+                case "docEnded":
+                    log.innerHTML += "<br>docEnded : Last line of document printed.";
+                    break;
+                case "finished":
+                    log.innerHTML += "<br>finished : Printer connection closed.";
+                    break;
+                case "docStarted":
+                    log.innerHTML += "<br>docStarted : Document printing has begun.";
+                    break;
+                default:
+                    log.innerHTML += "<br>Other message: " + eventType;
+                    break;
+            }
+        };
+        </script>
+    </head>
+    <body onload="setup();">
+    <div id="setup" class="setup">
+        <b>Printer Setup</b><br>
+        <input type="text" id="ptrName" size=25 value="PR2" placeholder="Printer Name"/><br>
+        <input type="text" id="ptrMac" size=25 value="00:1D:DF:55:6C:27" placeholder="Printer MAC Address"/><br>
+        <input type="text" id="optText" size=25 placeholder="optional text"/><br>
+        <hr>
+        <input type="button" value="Print" id="ptrButton" onclick="printButtonClicked()"/>
+    </div><br>
+    <div id="sign" class="sign">
+        <canvas id="signature" style="position: relative; margin: 0; padding: 0; border: 1px solid #000000;"></canvas><br><br>
+        <input type="button" value="Clear" id="clearButton" onclick="clearSignature()"/>
+    </div>
+    <hr>
+    <div id="log" class="log">
+        <b>Status</b>
+    </div>
+    </body>
+</html>

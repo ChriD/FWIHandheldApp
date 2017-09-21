@@ -55,10 +55,11 @@
 
     <!-- Vendor -->
     <script type="text/javascript" src="js/db/localforage.min.js"></script>
-    <!-- Unfortunately i need jquery currently for (I'll try to remove the dependencies tough):
-        * ajax request in sagex3Connector.js
-    -->
-    <script type="text/javascript" src="js/jquery/jquery-3.1.1.min.js"></script> 	
+    <!-- No need for jquery for now! We use good old vanilla js -->
+    <!--script type="text/javascript" src="js/jquery/jquery-3.1.1.min.js"></script> 	-->
+    <script type="text/javascript" src="js/barcodeReader/intermec/BarcodeReader.js"></script>
+    <script type="text/javascript" src="js/barcodeReader/intermec/BarcodeReader-Ajax.js"></script>
+    <script type="text/javascript" src="js/barcodeReader/intermec/BarcodeReader-SwiftSettings.js"></script>    
 
     <!-- X3 -->
     <script type="text/javascript" src="js/x3/sageX3Connector.js"></script>
@@ -72,6 +73,8 @@
     <script type="text/javascript" src="js/app.js"></script>
     <script type="text/javascript" src="js/app.handheld.js"></script> 
     <script type="text/javascript" src="js/app.handheld.moser.js"></script> 
+    <script type="text/javascript" src="js/app.barcodeReader.js"></script> 
+    <script type="text/javascript" src="js/app.barcodeReader.intermec.js"></script>
           
     <script>
       

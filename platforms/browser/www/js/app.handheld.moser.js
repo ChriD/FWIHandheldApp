@@ -6,6 +6,7 @@ class AppHandheld_Moser extends AppHandheld
     { 
         super()
         this.sageX3Connector = null;
+        this.barcodeReader = null;
     }
 
     additionalLogIdentifier()
@@ -19,8 +20,18 @@ class AppHandheld_Moser extends AppHandheld
 
         document.addEventListener("SageX3ConnectorJS.Log", this.x3ConnectorLog)
         document.addEventListener("SageX3ConnectorJS.ConnectionStateChanged", this.x3ConnectorStateChanged)
+        document.addEventListener("BarcodeReader.dataReady", this.barcodeReady(this))
 
-        this.sageX3Connector = new SageX3Connector()        
+        this.sageX3Connector    = new SageX3Connector()  
+        this.barcodeReader      = new AppBarcodeReader_Intermec()        
+        this.barcodeReader.parmLogger(this.parmLogger())
+    }
+
+    exitApp()
+    {
+        if(this.barcodeReader)
+            this.barcodeReader.close()
+        super.exitApp()
     }
 
     appSettingsLoaded()
@@ -81,6 +92,15 @@ class AppHandheld_Moser extends AppHandheld
         if (_e.logType === 4) app.logError(_e.logText)
     }  
 
+    barcodeReady(self)
+    {
+        return function(_data)
+        {
+            // TODO: dispatch barcode to current view
+            self.logDebug("Barcode scanned: " + _data.toString())
+        }
+    }
+
 
     /*
     setSystemOnline(_online)
@@ -102,7 +122,7 @@ class AppHandheld_Moser extends AppHandheld
             app.changeView("appMainViews", "app-view-app")
     }
     */
-    
+
 
 }
 
