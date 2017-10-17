@@ -1,20 +1,35 @@
-<app-view-productionusage class="view">
+<app-view-productionUsage class="view">
   
    <div class="view-content">
       <div id="productionusage_container" class="view-contentContainer">     
 
+        <!-- scan prompter to tell the user what he has to scan -->
         <div id="productionusage-scanPrompter" class="scanPrompter">
           <div class="centerAll">{ scanPrompterText }</div>          
         </div>
 
         <div id="productionusage-scanError" class="scanError">
-            <div class="centerAll">{ scanErrorText }</div>
+          <div class="centerAll">{ scanErrorText }</div>
+        </div>
+
+        <!-- scanned item information part -->
+        <div id="productionusage-itemInfo">
+          <div>
+            <div>Art. Nr.:</div>
+            <div>{ productNumber }</div>
           </div>
+          </div>
+            <div>Bez.:</div>
+            <div>{ productDescription }</div>
+          </div>
+        </div>
+
 
         <div>
           <button id="productionusage-button-testItm">TEST ITM SCAN</button>
           <button id="productionusage-button-testLot">TEST LOT SCAN</button>
           <button id="productionusage-button-reset">Reset</button>
+          <button id="productionusage-button-post">Buchen</button>
         </div>
           
       </div>
@@ -96,6 +111,16 @@
       document.getElementById("productionusage-button-reset").onclick = function(){
         self.resetScanView();
       } 
+
+      document.getElementById("productionusage-button-post").onclick = function(){
+        app.sageX3Connector.moduleProductionUsage.createAndPostItemUsage("07015", 10, "0", "DUCHTEST0003").then(function(_result){
+
+        }).catch(function(_error)
+        {
+        
+        });
+      } 
+      
       // TEST <--      
 
     })
@@ -131,7 +156,7 @@
       // check if barcode has a lot. if there is no lot there has to be a second scan
 
       app.setBusy(true)
-      // TODO: deliver bercode to backend and wait for result data
+      // TODO: deliver barcode to backend and wait for result data
       app.setBusy(false)
 
       self.setScanError("");
@@ -213,4 +238,4 @@
 
   </script>  
 
-</app-view-productionusage>
+</app-view-productionUsage>

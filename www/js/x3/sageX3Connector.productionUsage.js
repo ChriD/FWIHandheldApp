@@ -55,18 +55,21 @@ class SageX3Connector_ProductionUsage
 	 * @param {function} callback function
 	 * @return a promise
 	 */ 
-	createAndPostItemUsage(_item, _qty, _lot, _callback = null)
+	createAndPostItemUsage(_itmRef, _qty, _lotFrom, _lotTo, _callback = null)
 	{		
 		self = this;
 		return new Promise(function(_resolve, _reject){			
 			var jsonParameters = 
 				{
 					"INPUT" :		{
-										"SCANCODE"  	: _scancode										
+										"ITMREF"  	: _itmRef,
+										"LOTFROM"  	: _lotFrom,
+										"LOTTO"  	: _lotTo,
+										"QTYSTU"  	: _qty
 									}
 				}   
-				/*           						
-			self.sageX3Connector.callSubprog("PICK|CHECKISVALIDLOT|" + self.requestIdCounter["PICK|CHECKISVALIDLOT"], "XFPICK_IVL", jsonParameters, true, function(_requestId, _data, _error)
+         						
+			self.sageX3Connector.callSubprog("ISRE|POSTPRODUCTIONUSAGE", "XFISRE_PPU", jsonParameters, true, function(_requestId, _data, _error)
 			{
 				if(_callback)
 					_callback(_requestId, _data, _error);
@@ -86,7 +89,7 @@ class SageX3Connector_ProductionUsage
 					}
 				}
 			});  
-			*/          
+			        
 		})
     }
 
