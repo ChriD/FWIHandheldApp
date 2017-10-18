@@ -16,11 +16,11 @@
         <div id="productionusage-itemInfo">
           <div>
             <div>Art. Nr.:</div>
-            <div>{ productNumber }</div>
+            <div>{ scancodeData.ITMREF }</div>
           </div>
           </div>
             <div>Bez.:</div>
-            <div>{ productDescription }</div>
+            <div>{ scancodeData.ITMDES }</div>
           </div>
         </div>
 
@@ -82,6 +82,7 @@
     this.currentScantype    = 0
     this.scanPrompterText   = ""
     this.scanErrorText      = ""
+    this.scancodeData       = new Object()      
 
     // every view tag needs to callback the mounted method so the <app-view> tag will know when its only child is mounted
     this.on('mount', () => {      
@@ -98,13 +99,14 @@
       // TEST -->
       document.getElementById("productionusage-button-testItm").onclick = function(){
         var e = new Object()
-        e.value = "A"
+        //e.value = "]C1(01)99004699954211(15)180526(30)10"
+        e.value = "]C10199004699954211151805263010↔"
         self.barcodeReady(e)
       }   
 
       document.getElementById("productionusage-button-testLot").onclick = function(){
         var e = new Object()
-        e.value = "B"
+        e.value = "]C1100003470970008↔310301000090K3↔"
         self.barcodeReady(e)
       } 
 
@@ -152,16 +154,41 @@
       //var newNode = document.createElement('div');    
       //newNode.innerHTML = _data.value;  
       //document.getElementById("productionusage_container").appendChild(newNode);      
-
-      // check if barcode has a lot. if there is no lot there has to be a second scan
+      
+      self.setScanError("");
 
       app.setBusy(true)
+      app.sageX3Connector.moduleProductionUsage.getScanCodeInformations(_data.value).then(function(_result){
+          
+          // TODO: @@@
+          // TODO: clear result if type 1 (item)
+          if(_result.ITMREF)  self.scancodeData.ITMREF   = _result.ITMREF
+          if(_result.ITMDES)  self.scancodeData.ITMDES   = _result.ITMDES
+          if(_result.EAN)     self.scancodeData.EAN      = _result.EAN
+          if(_result.BBD)     self.scancodeData.BBD      = _result.BBD          
+          if(_result.LOT)     self.scancodeData.LOT      = _result.LOT
+          if(_result.QTY)     self.scancodeData.QTY      = _result.QTY
+          if(_result.UOM)     self.scancodeData.UOM      = _result.UOM
+          if(_result.QTYSTU)  self.scancodeData.QTYSTU   = _result.QTYSTU
+          if(_result.STU)     self.scancodeData.STU      = _result.STU
+          if(_result.WEIGHT)  self.scancodeData.WEIGHT   = _result.WEIGHT
+
+          // TODO: switch scantypes or show errors
+
+          self.update()
+          app.setBusy(false)
+        }).catch(function(_error){          
+          self.setScanError(_error);
+          app.setBusy(false)
+        });
+
+
       // TODO: deliver barcode to backend and wait for result data
       app.setBusy(false)
 
       self.setScanError("");
 
-
+      /*
       if(this.currentScantype == 0)  
       {
         if(_data.value == "A")
@@ -185,7 +212,8 @@
         {
           self.setScanError("Keinen Charge gescannt!")
         }
-      }         
+      }   
+      */      
 
       // TEST <--
 
