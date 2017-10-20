@@ -13,14 +13,18 @@ class SageX3Connector_ProductionUsage
 	 * @param {function} callback function
 	 * @return a promise
 	 */ 
-	getScanCodeInformations(_scancode, _callback = null)
+	getScanCodeInformations(_scancode, _scancodeType, _addprefix = 1, _checkprefix = 1, _fnc1 = "", _callback = null)
 	{		
 		self = this;
 		return new Promise(function(_resolve, _reject){			
 			var jsonParameters = 
 				{
 					"INPUT" :		{
-										"SCANCODE"  	: _scancode										
+										"SCANCODE"  	: _scancode,										
+										"SCANCODETYPE"  : _scancodeType,
+										"ADDPREFIX"  	: _addprefix,
+										"CHECKPREFIX"  	: _checkprefix,
+										"FNC1"			: _fnc1
 									}
 				}   
 				           						
@@ -87,7 +91,7 @@ class SageX3Connector_ProductionUsage
 						_resolve(jsonData);				
 					}
 				}
-			});  
+			})
 			        
 		})
     }

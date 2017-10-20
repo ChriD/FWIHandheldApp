@@ -3,27 +3,24 @@
    <div class="view-content">
       <div id="productionusage_container" class="view-contentContainer">     
 
+        <!-- TODO: create scan prompter / info tag -->
         <!-- scan prompter to tell the user what he has to scan -->
         <div id="productionusage-scanPrompter" class="scanPrompter">
           <div class="centerAll">{ scanPrompterText }</div>          
+        </div>
+
+        <div id="productionusage-scanData" class="scanData">
+          <div class="centerAll">{ lastScannedCode }</div>
         </div>
 
         <div id="productionusage-scanError" class="scanError">
           <div class="centerAll">{ scanErrorText }</div>
         </div>
 
-        <!-- scanned item information part -->
-        <div id="productionusage-itemInfo">
-          <div>
-            <div>Art. Nr.:</div>
-            <div>{ scancodeData.ITMREF }</div>
-          </div>
-          </div>
-            <div>Bez.:</div>
-            <div>{ scancodeData.ITMDES }</div>
-          </div>
-        </div>
-
+        <!-- scanned item informations -->
+        <app-item-descriptionAndValue id="productionusage-item-dv-item"     description="Art. Nr.:"></app-item-descriptionAndValue>
+        <app-item-descriptionAndValue id="productionusage-item-dv-itemDes"  description="Bez.:"    ></app-item-descriptionAndValue>        
+        <app-item-descriptionAndValue id="productionusage-item-dv-lot"      description="Charge:"  ></app-item-descriptionAndValue>      
 
         <div>
           <button id="productionusage-button-testItm">TEST ITM SCAN</button>
@@ -58,6 +55,10 @@
       background: rgb(255,153,45);
     }
 
+    .scanData {
+      font-size: 0.75em;
+    }
+
     .scanError {
       width: 100%;
       height: 1em;                    
@@ -79,9 +80,14 @@
 
   <script>
     var self = this
+    //this.FNC1               = '\u001d'
+    this.FNC1               = '#'
+    //this.FNC1               = 
+    //100003470970008310301000090K3
     this.currentScantype    = 0
     this.scanPrompterText   = ""
     this.scanErrorText      = ""
+    this.lastScannedCode    = ""
     this.scancodeData       = new Object()      
 
     // every view tag needs to callback the mounted method so the <app-view> tag will know when its only child is mounted
@@ -100,18 +106,18 @@
       document.getElementById("productionusage-button-testItm").onclick = function(){
         var e = new Object()
         //e.value = "]C1(01)99004699954211(15)180526(30)10"
-        e.value = "]C10199004699954211151805263010↔"
+        e.value = "0199004699954211151805263010"
         self.barcodeReady(e)
       }   
 
       document.getElementById("productionusage-button-testLot").onclick = function(){
         var e = new Object()
-        e.value = "]C1100003470970008↔310301000090K3↔"
+        e.value = "100003470970008" + self.FNC1 + "310301000090K3"
         self.barcodeReady(e)
       } 
 
       document.getElementById("productionusage-button-reset").onclick = function(){
-        self.resetScanView();
+        self.resetScan();
       } 
 
       document.getElementById("productionusage-button-post").onclick = function(){
@@ -140,7 +146,8 @@
 
     this.on('entered', (_e) => {      
       // reset scantype and clear all data when reentring the form
-      self.resetScanView();
+      self.lastScannedCode = ""
+      self.resetScan()
     })
 
 
@@ -155,75 +162,117 @@
       //newNode.innerHTML = _data.value;  
       //document.getElementById("productionusage_container").appendChild(newNode);      
       
-      self.setScanError("");
+      self.setScanError("")
+      self.lastScannedCode = _data.value
 
+      if(self.scancodeData.ITMREF && self.scancodeData.LOT)
+        self.resetScan()
+  
       app.setBusy(true)
-      app.sageX3Connector.moduleProductionUsage.getScanCodeInformations(_data.value).then(function(_result){
+      
+      app.sageX3Connector.moduleProductionUsage.getScanCodeInformations(_data.value, _data.type, 1, 1, self.FNC1).then(function(_result){
           
-          // TODO: @@@
-          // TODO: clear result if type 1 (item)
-          if(_result.ITMREF)  self.scancodeData.ITMREF   = _result.ITMREF
-          if(_result.ITMDES)  self.scancodeData.ITMDES   = _result.ITMDES
-          if(_result.EAN)     self.scancodeData.EAN      = _result.EAN
-          if(_result.BBD)     self.scancodeData.BBD      = _result.BBD          
-          if(_result.LOT)     self.scancodeData.LOT      = _result.LOT
-          if(_result.QTY)     self.scancodeData.QTY      = _result.QTY
-          if(_result.UOM)     self.scancodeData.UOM      = _result.UOM
-          if(_result.QTYSTU)  self.scancodeData.QTYSTU   = _result.QTYSTU
-          if(_result.STU)     self.scancodeData.STU      = _result.STU
-          if(_result.WEIGHT)  self.scancodeData.WEIGHT   = _result.WEIGHT
+          if(!_result.ITMREF && !self.scancodeData.ITMREF || _result.LOT && !self.scancodeData.ITMREF)
+          {
+            self.setScanError("Keinen Artikel gescannt!")            
+          }
+          else if(!_result.LOT && self.scancodeData.ITMREF )
+          {
+            self.setScanError("Keinen Charge gescannt!")            
+          }          
+          else
+          {           
 
-          // TODO: switch scantypes or show errors
+            // we do have a valid scan so we "merge" the data from multiple different scans
+            // in fact we may have 2 scans if the lot is not within the first scan. We always do need itemid and lot at least
+            if(_result.ITMREF)  self.scancodeData.ITMREF   = _result.ITMREF
+            if(_result.ITMDES)  self.scancodeData.ITMDES   = _result.ITMDES
+            if(_result.EAN)     self.scancodeData.EAN      = _result.EAN
+            if(_result.BBD)     self.scancodeData.BBD      = _result.BBD          
+            if(_result.LOT)     self.scancodeData.LOT      = _result.LOT
+            if(_result.QTY)     self.scancodeData.QTY      = _result.QTY
+            if(_result.UOM)     self.scancodeData.UOM      = _result.UOM
+            if(_result.QTYSTU)  self.scancodeData.QTYSTU   = _result.QTYSTU
+            if(_result.STU)     self.scancodeData.STU      = _result.STU
+            if(_result.WEIGHT)  self.scancodeData.WEIGHT   = _result.WEIGHT
+          }
 
-          self.update()
+          // if we do have filled itmref and we do not have a lot, we have to scan the lot,
+          // so set scanytpe to 1 (that means user has to scan a lot)
+          if(self.scancodeData.ITMREF && !self.scancodeData.LOT)
+          {
+            self.setScanType(1)
+          }
+          // if lot and itmref are filled we do have all data we need for posting, If auto post is enabled
+          // we do post and reset scan type and scancode data to 0. If not we have to wait for click on posting
+          if(self.scancodeData.ITMREF && self.scancodeData.LOT)
+          {
+            if(app.getAppSettings().PRODUSAGE_AUTOCONFIRMPOST == true)
+            {
+              self.post().then(function(){
+                self.setScanType(0)
+              }).catch(function(_error){
+                // TODO: @@@
+                self.setScanType(0)
+                self.setScanError("Buchen fehlgeschlagen: " + _error)
+              })                
+            }  
+            else
+            {
+              // TODO: Enable POST Button and wait for POST
+            }
+          }                    
+
+          self.updateItemDescValue()
+          self.update()          
+          
+
           app.setBusy(false)
         }).catch(function(_error){          
           self.setScanError(_error);
           app.setBusy(false)
         });
+    }
 
 
-      // TODO: deliver barcode to backend and wait for result data
-      app.setBusy(false)
-
-      self.setScanError("");
-
-      /*
-      if(this.currentScantype == 0)  
-      {
-        if(_data.value == "A")
+    post()
+    {
+      return new Promise(function(_resolve, _reject){	
+        app.sageX3Connector.moduleProductionUsage.createAndPostItemUsage(self.scancodeData.ITMREF, self.scancodeData.QTYSTU, "", self.scancodeData.LOT).then(function(_result){
+          _resolve()
+        }).catch(function(_error)
         {
-          self.setScanType(1);
-        }
-        else
-        {
-          self.setScanError("Keinen Artikel gescannt!")
-        }
-      }
+          _reject()
+        })
+      })
+    }
+      
 
-
-      else if(this.currentScantype == 1)  
-      {
-        if(_data.value == "B")
-        {
-          self.setScanType(0);
-        }
-        else
-        {
-          self.setScanError("Keinen Charge gescannt!")
-        }
-      }   
-      */      
-
-      // TEST <--
-
+    // unfortunately it seems that riot can not update the opts values of tags (non observable)
+    // so we do have create this method to set the values 'oldSchool'
+    updateItemDescValue()
+    {
+      document.getElementById('productionusage-item-dv-item')._tag.setValue(self.scancodeData.ITMREF)
+      document.getElementById('productionusage-item-dv-itemDes')._tag.setValue(self.scancodeData.ITMDES);
+      document.getElementById('productionusage-item-dv-lot')._tag.setValue(self.scancodeData.LOT);     
     }
 
 
     resetScanView()
-    {
+    {           
       self.setScanType(0)
-      self.setScanError("")
+      self.setScanError("")  
+      self.updateItemDescValue()    
+    }
+
+
+    resetScan()
+    {
+      self.scancodeData = new Object();
+      self.scancodeData.ITMREF  = ""
+      self.scancodeData.ITMDES  = ""
+      self.scancodeData.LOT     = ""
+      self.resetScanView()
     }
 
 

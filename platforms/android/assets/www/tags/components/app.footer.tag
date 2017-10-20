@@ -51,7 +51,7 @@
         this.getConnectedToElement().classList.add("notConnected")
       else
         this.getConnectedToElement().classList.remove("notConnected")
-      this.update();
+      this.update()
     }
 
 

@@ -33,7 +33,7 @@
 
     .menuItem .right {
       width: 230px;
-      flex: 0 0 4em;
+      flex: 1 1 4em;
       position: relative;
     }
 

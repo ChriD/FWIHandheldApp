@@ -18,7 +18,8 @@ class SageX3Connector
 		this.pingInterval		= 7500;
 		this.noPingSended		= true;
         // modules
-        this.modulePicking      =  new SageX3Connector_Picking(this);
+        this.modulePicking              =  new SageX3Connector_Picking(this);
+        this.moduleProductionUsage      =  new SageX3Connector_ProductionUsage(this);
     }
 
     /**

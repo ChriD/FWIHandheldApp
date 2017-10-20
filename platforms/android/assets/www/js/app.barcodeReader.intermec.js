@@ -12,7 +12,7 @@ class AppBarcodeReader_Intermec extends AppBarcodeReader
         super.init();        
         if(!this.barcodeReader)
         {
-            this.logDebug(" staring barcode reader setup")
+            this.logDebug("Staring barcode reader setup")
             this.barcodeReader = new BarcodeReader(null, this.setupBarcodeReaderComplete(this))
         }
     }
@@ -30,7 +30,7 @@ class AppBarcodeReader_Intermec extends AppBarcodeReader
         {
             if (_result.status === 0)
             {
-                self.logDebug("BarcodeReader setup successfull")
+                self.logDebug("Barcode reader setup successfull")
                 self.barcodeReader.setBuffered("Symbology", "Code39", "Enable", "true", self.setBufferedComplete(self));
                 self.barcodeReader.setBuffered("Symbology", "Code128", "EnableCode128", "true", self.setBufferedComplete(self));
                 self.barcodeReader.commitBuffer(self.commitComplete(self));
