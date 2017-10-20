@@ -21,6 +21,11 @@
     outline: none;
   }
 
+
+  .buttonRow button.disabled {
+    color: #666262;    
+  }
+
 .buttonRow button:hover,
 .buttonRow button.hover { 
     color: rgb(238,114,3);

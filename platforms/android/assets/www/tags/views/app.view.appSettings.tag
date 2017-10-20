@@ -6,7 +6,8 @@
     <div class="view-content">
       <div class="view-contentContainer">
 
-        <div id="appSettings-settings" class="settings">      
+        <div id="appSettings-settings" class="settings">   
+
           <div class="settingsItem">
             <div>X3 Webservice Url</div>
             <div><input type="text" id="SETTINGS_X3_URL" data-id="X3_URL"></input></div>
@@ -31,6 +32,12 @@
 							<option value="BRI">BRI - Englisch (UK)</option>				
 					  </select>            
           </div>
+
+          <div class="settingsItem">
+            <div>Produktionsverbrauch autom. buchen</div>
+            <div><input type="checkbox" id="SETTINGS_PRODUSAGE_AUTOCONFIRMPOST" data-id="PRODUSAGE_AUTOCONFIRMPOST"></input></div>
+          </div>
+
         </div>
       </div>
 

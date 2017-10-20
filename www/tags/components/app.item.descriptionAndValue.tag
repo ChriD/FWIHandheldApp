@@ -1,5 +1,5 @@
 <app-item-descriptionAndValue>  
-  <div class="description">{ description }</div>
+  <div class="description" style="width: {deswidth}">{ description }</div>
   <div class="value">{ value }</div>
 
   <style>
@@ -11,7 +11,7 @@
     }
 
     .description {
-      float: left;
+      float: left;      
     }
 
     .value {
@@ -23,8 +23,9 @@
     var self = this
     this.description  = this.opts.description 
     this.value        = this.opts.value
+    this.deswidth     = this.opts.deswidth
 
-    this.on('mount', () => {
+    this.on('mount', () => {      
     })    
 
     setDescription(_description){
