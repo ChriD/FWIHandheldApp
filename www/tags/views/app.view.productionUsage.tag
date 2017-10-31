@@ -28,10 +28,14 @@
           <app-item-descriptionAndValue id="productionusage-item-dv-weight"     description="Gewicht:"      desWidth="5em"></app-item-descriptionAndValue>
         </div>
 
+        
         <div>
           <button id="productionusage-button-testItm">TEST ITM SCAN</button>
-          <button id="productionusage-button-testLot">TEST LOT SCAN</button>          
+          <button id="productionusage-button-testLot">TEST LOT SCAN</button>                    
         </div>
+        
+        
+        
           
       </div>
     </div>
@@ -109,7 +113,7 @@
         self.opts.mountedCallback()
       
       document.getElementById("productionusage-button-cancel").onclick = function(){                        
-        app.getMainViewContainer().showPrevView()
+        application.getMainViewContainer().showPrevView()
       }    
 
       document.getElementById("productionusage-button-post").onclick = function(){
@@ -121,9 +125,13 @@
       } 
 
       // TEST -->
+      
+      
       document.getElementById("productionusage-button-testItm").onclick = function(){
         var e = new Object()        
         e.value = "0199004699954211151805263010"
+        //e.value = "0104002540351907151805263010"
+        //e.value = "010400254035190715181113100011946474"
         self.barcodeReady(e)
       }   
 
@@ -163,6 +171,7 @@
     {
       self.setScanType(0)
       self.setScanError("Buchen fehlgeschlagen: " + _error)
+      application.audioError()
     }
 
     isEmpty(_val)
@@ -182,11 +191,11 @@
       if(self.scancodeData.ITMREF && self.scancodeData.LOT)
         self.resetScan()
   
-      app.setBusy(true)
+      application.setBusy(true)
       
-      app.sageX3Connector.moduleProductionUsage.getScanCodeInformations(_data.value, _data.type, 1, 1, self.FNC1).then(function(_result){
+      application.sageX3Connector.moduleProductionUsage.getScanCodeInformations(_data.value, _data.type, 1, 1, self.FNC1).then(function(_result){
           
-          if(!_result.ITMREF && !self.scancodeData.ITMREF || _result.LOT && !self.scancodeData.ITMREF)
+          if((!_result.ITMREF && !self.scancodeData.ITMREF) || (_result.LOT && !self.scancodeData.ITMREF && !_result.ITMREF))
           {
             self.setScanError("Keinen Artikel gescannt!")            
           }
@@ -225,7 +234,7 @@
           // we do post and reset scan type and scancode data to 0. If not we have to wait for click on posting
           if(self.scancodeData.ITMREF && self.scancodeData.LOT)
           {
-            if(app.getAppSettings().PRODUSAGE_AUTOCONFIRMPOST == true)
+            if(application.getAppSettings().PRODUSAGE_AUTOCONFIRMPOST == true)
             {              
               self.post().then(function(){                
                 self.setScanType(0)
@@ -246,10 +255,10 @@
           self.update()          
           
 
-          app.setBusy(false)
+          application.setBusy(false)
         }).catch(function(_error){          
           self.setScanError(_error)
-          app.setBusy(false)
+          application.setBusy(false)
         })
     }
 
@@ -260,7 +269,7 @@
         return
 
       return new Promise(function(_resolve, _reject){	
-        app.sageX3Connector.moduleProductionUsage.createAndPostItemUsage(self.scancodeData.ITMREF, self.scancodeData.QTYSTU, "", self.scancodeData.LOT).then(function(_result){
+        application.sageX3Connector.moduleProductionUsage.createAndPostItemUsage(self.scancodeData.ITMREF, self.scancodeData.QTYSTU, "", self.scancodeData.LOT).then(function(_result){
           _resolve()
         }).catch(function(_error)
         {
@@ -347,9 +356,14 @@
     {
       self.scanErrorText = _scanError
       if(self.scanErrorText == "")
+      {
         document.getElementById("productionusage-scanError").style.visibility = 'hidden'
+      }
       else
+      {
         document.getElementById("productionusage-scanError").style.visibility = 'visible'
+        application.audioError()
+      }
       self.update()
     }
 

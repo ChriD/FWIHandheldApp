@@ -38,9 +38,8 @@
     this.connectedToInfo = ""
 
     this.on('mount', () => {         
-      document.getElementById("viewBackIcon").onclick = function(){                
-        app.logDebug("Clicked 'Back'")
-        app.getMainViewContainer().showPrevView();
+      document.getElementById("viewBackIcon").onclick = function(){                        
+        application.getMainViewContainer().showPrevView() // TODO: @@@ application object""""
       }      
     })
 

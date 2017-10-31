@@ -1,26 +1,34 @@
 {
-    "cordova-plugin-splashscreen": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-plugin-splashscreen@4.0.3"
-        },
-        "is_top_level": true,
-        "variables": {}
+  "cordova-plugin-splashscreen": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-splashscreen@4.0.3"
     },
-    "cordova-plugin-fullscreen": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-plugin-fullscreen"
-        },
-        "is_top_level": true,
-        "variables": {}
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-fullscreen": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-fullscreen"
     },
-    "cordova-plugin-whitelist": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-plugin-whitelist@1.3.2"
-        },
-        "is_top_level": true,
-        "variables": {}
-    }
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-whitelist": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-whitelist@1.3.2"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova.custom.plugins.exitapp": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-exitapp"
+    },
+    "is_top_level": true,
+    "variables": {}
+  }
 }

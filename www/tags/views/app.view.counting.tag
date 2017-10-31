@@ -25,7 +25,7 @@
       }  
       
       document.getElementById("counting-button-cancel").onclick = function(){                        
-        app.getMainViewContainer().showPrevView();
+        application.getMainViewContainer().showPrevView();
       } 
 
     })

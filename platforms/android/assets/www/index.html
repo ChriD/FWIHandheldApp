@@ -57,7 +57,9 @@
     
 
     <!-- Vendor -->
+    <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="js/db/localforage.min.js"></script>
+    <script type="text/javascript" src="js/audio/howler.js"></script>    
     <!-- No need for jquery for now! We use good old vanilla js -->
     <!--script type="text/javascript" src="js/jquery/jquery-3.1.1.min.js"></script> 	-->
     <script type="text/javascript" src="BarcodeReader.js"></script>
@@ -85,8 +87,8 @@
           
     <script>
       
-      var app = new AppHandheld_Moser()
-      app.init()
+      var application = new AppHandheld_Moser()
+      application.init()
 
       /*
       document.addEventListener("backbutton", function () { 

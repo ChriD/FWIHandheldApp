@@ -5,8 +5,9 @@ class AppHandheld_Moser extends AppHandheld
     constructor() 
     { 
         super()
-        this.sageX3Connector = null;
-        this.barcodeReader = null;
+        this.sageX3Connector = null
+        this.barcodeReader = null
+        this.errorSound = null
     }
 
     additionalLogIdentifier()
@@ -18,14 +19,16 @@ class AppHandheld_Moser extends AppHandheld
     {                
         super.init()
 
-        document.addEventListener("SageX3ConnectorJS.Log", this.x3ConnectorLog)
-        document.addEventListener("SageX3ConnectorJS.ConnectionStateChanged", this.x3ConnectorStateChanged)
+        document.addEventListener("SageX3ConnectorJS.Log", this.x3ConnectorLog(this))
+        document.addEventListener("SageX3ConnectorJS.ConnectionStateChanged", this.x3ConnectorStateChanged(this))
         document.addEventListener("BarcodeReader.dataReady", this.barcodeReady(this))
 
         this.sageX3Connector    = new SageX3Connector()  
         this.barcodeReader      = new AppBarcodeReader_Intermec()        
         this.barcodeReader.parmLogger(this.parmLogger())
         this.barcodeReader.init();
+
+        this.errorSound = new Howl({ src: ['sound/error3.wav'], volume: 1.0 });
     }
 
     exitApp()
@@ -43,7 +46,7 @@ class AppHandheld_Moser extends AppHandheld
     connectToBackend()
     {
         this.setBusy(true);
-        app.getFooter().setConnectedToInfo(true, "Verbinde zu X3...")
+        this.getFooter().setConnectedToInfo(true, "Verbinde zu X3...")
         this.x3ConnectorConnect()
     }
 
@@ -64,33 +67,39 @@ class AppHandheld_Moser extends AppHandheld
 
 	x3ConnectorConnect()
 	{        
-		if(!this.sageX3Connector.init(app.getAppSettings().X3_URL, app.getAppSettings().X3_POOLID, app.getAppSettings().X3_USER, app.getAppSettings().X3_PASS, app.getAppSettings().X3_LANG))
+		if(!this.sageX3Connector.init(this.getAppSettings().X3_URL, this.getAppSettings().X3_POOLID, this.getAppSettings().X3_USER, this.getAppSettings().X3_PASS, this.getAppSettings().X3_LANG))
             this.logError("Fehler beim initialisieren der X3 Verbindung!");		
 	}
 		
 
-	x3ConnectorStateChanged(_data)
-	{	
-        if(_data.detail.connected)   
-        {     
-            app.setBusy(false);
-            app.getFooter().setConnectedToInfo(true, "Verbunden mit: " + app.getAppSettings().X3_POOLID)
-        }
-        else
-        {
-            app.setBusy(true);
-            app.getFooter().setConnectedToInfo(false, "Keine Verbindung!")
+	x3ConnectorStateChanged(_self)
+	{
+        return function(_data)
+        {	
+            if(_data.detail.connected)   
+            {     
+                _self.setBusy(false);
+                _self.getFooter().setConnectedToInfo(true, "Verbunden mit: " + _self.getAppSettings().X3_POOLID)
+            }
+            else
+            {
+                _self.setBusy(true);
+                _self.getFooter().setConnectedToInfo(false, "Keine Verbindung!")
+            }
         }
     }
     
 
-    x3ConnectorLog(_e)
-    {        
-        if (_e.logType === 0) app.logDebug(_e.logText)
-        if (_e.logType === 1) app.logInfo(_e.logText)
-        if (_e.logType === 2) app.logWarning(_e.logText)
-        if (_e.logType === 3) app.logError(_e.logText)
-        if (_e.logType === 4) app.logError(_e.logText)
+    x3ConnectorLog(_self)
+    {   
+        return function(_e)
+        {     
+            if (_e.logType === 0) _self.logDebug(_e.logText)
+            if (_e.logType === 1) _self.logInfo(_e.logText)
+            if (_e.logType === 2) _self.logWarning(_e.logText)
+            if (_e.logType === 3) _self.logError(_e.logText)
+            if (_e.logType === 4) _self.logError(_e.logText)
+        }
     }  
 
     barcodeReady(self)
@@ -104,27 +113,11 @@ class AppHandheld_Moser extends AppHandheld
     }
 
 
-    /*
-    setSystemOnline(_online)
-    {
-        this.logDebug("System is " +  (_online ? "online" : "offline") )
-        if(!_online)
-            app.changeView("appMainViews", "app-view-systemOffline")
-        else
-            app.changeView("appMainViews", "app-view-app")
+    audioError()
+    {     
+        if(this.errorSound)
+            this.errorSound.play()
     }
-
-
-    setRoomOnline(_online)
-    {
-        this.logDebug("Room is " +  (_online ?  "online" : "offline")) 
-        if(!_online)
-            app.changeView("appMainViews", "app-view-roomOffline")
-        else
-            app.changeView("appMainViews", "app-view-app")
-    }
-    */
-
 
 }
 

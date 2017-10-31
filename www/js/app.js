@@ -81,7 +81,7 @@ class App extends AppBase
     
     getMainViewContainer()
     {
-        return app.getViewContainer("app-appViews")  
+        return this.getViewContainer("app-appViews")  
     }
 
 
@@ -98,8 +98,19 @@ class App extends AppBase
 
 
     exitApp()
-    {
-        navigator.app.exitApp()
+    {        
+        if (navigator.app) 
+        {
+            navigator.app.exitApp()
+        }
+        else if (navigator.device)
+        {
+            navigator.device.exitApp()          
+        } 
+        else 
+        {            
+            //window.close();
+        }
     }
 
 }

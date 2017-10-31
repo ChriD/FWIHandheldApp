@@ -1,21 +1,24 @@
 {
-    "prepare_queue": {
-        "installed": [],
-        "uninstalled": []
+  "prepare_queue": {
+    "installed": [],
+    "uninstalled": []
+  },
+  "config_munge": {
+    "files": {}
+  },
+  "installed_plugins": {
+    "cordova-plugin-fullscreen": {
+      "PACKAGE_NAME": "com.fwi.sagemobile"
     },
-    "config_munge": {
-        "files": {}
+    "cordova-plugin-splashscreen": {
+      "PACKAGE_NAME": "com.fwi.sagemobile"
     },
-    "installed_plugins": {
-        "cordova-plugin-fullscreen": {
-            "PACKAGE_NAME": "com.fwi.sagemobile"
-        },
-        "cordova-plugin-splashscreen": {
-            "PACKAGE_NAME": "com.fwi.sagemobile"
-        },
-        "cordova-plugin-whitelist": {
-            "PACKAGE_NAME": "com.fwi.sagemobile"
-        }
+    "cordova-plugin-whitelist": {
+      "PACKAGE_NAME": "com.fwi.sagemobile"
     },
-    "dependent_plugins": {}
+    "cordova.custom.plugins.exitapp": {
+      "PACKAGE_NAME": "com.fwi.sagemobile"
+    }
+  },
+  "dependent_plugins": {}
 }

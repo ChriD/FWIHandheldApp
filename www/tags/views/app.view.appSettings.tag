@@ -71,15 +71,15 @@
       // save the current settings and the close the view
       document.getElementById("appSettings-button-save").onclick = function(){       
         self.saveSettings().then(function(){
-          app.getMainViewContainer().showPrevView();
+          application.getMainViewContainer().showPrevView();
         }).catch(function(_error){
-          app.logError(_error.toString(), _error);
+          application.logError(_error.toString(), _error);
         })               
       }  
 
       // close the view without saving the settings
       document.getElementById("appSettings-button-cancel").onclick = function(){                        
-        app.getMainViewContainer().showPrevView();
+        application.getMainViewContainer().showPrevView();
       }          
 
     })
@@ -88,7 +88,7 @@
     this.on('entered', () => {            
       // load the current settings when entering the view
       self.loadSettings().catch(function(_error){
-        app.logError(_error.toString(), _error);
+        application.logError(_error.toString(), _error);
       })   
     })     
 
@@ -111,10 +111,10 @@
       return new Promise(function(_resolve, _reject){
         try
         {
-          app.tools.getInputDataObject(document.getElementById("appSettings-settings")).then(function(_inputData){
-            app.settings.saveSettings("APP", app.tools.inputDataObjectToStorageObject(_inputData)).then(function(){
-              app.settings.loadSettings("APP").then(function(_settingsData){                
-                app.connectToBackend()
+          application.tools.getInputDataObject(document.getElementById("appSettings-settings")).then(function(_inputData){
+            application.settings.saveSettings("APP", application.tools.inputDataObjectToStorageObject(_inputData)).then(function(){
+              application.settings.loadSettings("APP").then(function(_settingsData){                
+                application.connectToBackend()
                 _resolve()
               }).catch(function(_exception){
                 _reject(_exception)
@@ -140,8 +140,8 @@
       return new Promise(function(_resolve, _reject){
         try
         {
-          app.settings.loadSettings("APP").then(function(_settingsData){
-            app.tools.setDataObjectToInput(document.getElementById("appSettings-settings"), _settingsData)
+          application.settings.loadSettings("APP").then(function(_settingsData){
+            application.tools.setDataObjectToInput(document.getElementById("appSettings-settings"), _settingsData)
             _resolve()
           }).catch(function(_exception){
             _reject(_exception)

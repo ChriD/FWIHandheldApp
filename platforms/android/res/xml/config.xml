@@ -11,6 +11,9 @@
         <param name="android-package" value="org.apache.cordova.whitelist.WhitelistPlugin" />
         <param name="onload" value="true" />
     </feature>
+    <feature name="ExitApp">
+        <param name="android-package" value="cordova.custom.plugins.exitapp.ExitApp" />
+    </feature>
     <name>FWI-X3Mobile</name>
     <description>
         FWI X3 Mobile App

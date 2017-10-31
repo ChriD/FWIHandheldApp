@@ -14,8 +14,10 @@
       float: left;      
     }
 
-    .value {
-      float: left;
+    .value {      
+      white-space: nowrap;
+      overflow: hidden;      
+      text-overflow: ellipsis;
     }
   </style>
 

@@ -36,11 +36,11 @@
         self.opts.mountedCallback();
 
       // when a view is changing we have to update the toolbar text
-      app.getViewContainer("app-appViews").on('changeView', (_viewId) => {              
-        app.getToolbar().setText(app.getView(_viewId).name())
+      application.getViewContainer("app-appViews").on('changeView', (_viewId) => {              
+        application.getToolbar().setText(application.getView(_viewId).name())
       })  
 
-      app.connectToBackend()
+      application.connectToBackend()
 
     })  
    

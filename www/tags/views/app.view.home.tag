@@ -26,12 +26,12 @@
       listComponent._tag.selectionCallback = function(_itemData){        
         if(_itemData.viewTagName)
         {
-          app.logDebug("Change app view to : " + _itemData.viewTagName)
-          app.changeAppView(_itemData.viewTagName);
+          application.logDebug("Change app view to : " + _itemData.viewTagName)
+          application.changeAppView(_itemData.viewTagName);
         }
         else
         {
-          app.exitApp();
+          application.exitApp();
         }
       }      
     })   
@@ -44,10 +44,10 @@
       if(!_e.isPropagationStopped)
       {
         // Handle F(x) keys!
-        if(_e.keyCode == 112) app.changeAppView("app-view-productionusage")      // F1
-        //if(_e.keyCode == 113) app.changeAppView("app-view-iteminfo")      // F2
-        if(_e.keyCode == 122) app.changeAppView("app-view-appsettings")   // F11
-        if(_e.keyCode == 123) app.exitApp();                              // F12
+        if(_e.keyCode == 112) application.changeAppView("app-view-productionusage")      // F1
+        //if(_e.keyCode == 113) application.changeAppView("app-view-iteminfo")      // F2
+        if(_e.keyCode == 122) application.changeAppView("app-view-appsettings")   // F11
+        if(_e.keyCode == 123) application.exitApp();                              // F12
       }
       
       _e.isPropagationStopped = true
