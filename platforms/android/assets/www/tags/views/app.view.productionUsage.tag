@@ -13,8 +13,8 @@
           <div class="centerAll">{ lastScannedCode }</div>
         </div>
 
-        <div id="productionusage-scanError" class="scanError">
-          <div class="centerAll">{ scanErrorText }</div>
+        <div id="productionusage-scanInfo" class="scanInfo">
+          <div class="centerAll">{ scanInfoText }</div>
         </div>
 
         <!-- scanned item informations -->
@@ -32,6 +32,7 @@
         <div>
           <button id="productionusage-button-testItm">TEST ITM SCAN</button>
           <button id="productionusage-button-testLot">TEST LOT SCAN</button>                    
+          <button id="productionusage-button-testLot2">TEST LOT SCAN2</button>   
         </div>
         
         
@@ -70,16 +71,18 @@
       display: none;
     }
 
-    .scanError {
-      width: 100%;
+    .scanInfo {
+      /*width: 100%;*/
       min-height: 2.25em;                    
-      color: red;
+      /*color: red;*/
       visibility: hidden;
       margin-top: 0.5em;
       margin-bottom: 0.5em;
       font-size: 0.75em;
       overflow-y: scroll;
       margin-top: 0.5em;
+      padding-left: 1em;
+      padding-right: 1em;
     }
 
     .data {
@@ -102,10 +105,12 @@
     this.FNC1               = '\u001d'            
     this.currentScantype    = 0
     this.scanPrompterText   = ""
-    this.scanErrorText      = ""
+    this.scanInfoText       = ""
     this.lastScannedCode    = ""
     this.scancodeData       = new Object()   
-    this.postingLock        = true       
+    this.postingLock        = true    
+    this.lotFrom            = ""  
+    this.devMode            = false
 
     // every view tag needs to callback the mounted method so the <app-view> tag will know when its only child is mounted
     this.on('mount', () => {      
@@ -117,8 +122,9 @@
       }    
 
       document.getElementById("productionusage-button-post").onclick = function(){
-        self.post().then(function(){
+        self.post().then(function(_data){
           self.setScanType(0)
+          self.postingSuccess(_data)
         }).catch(function(_error){          
           self.postingError(_error)
         })
@@ -126,20 +132,35 @@
 
       // TEST -->
       
-      
-      document.getElementById("productionusage-button-testItm").onclick = function(){
-        var e = new Object()        
-        e.value = "0199004699954211151805263010"
-        //e.value = "0104002540351907151805263010"
-        //e.value = "010400254035190715181113100011946474"
-        self.barcodeReady(e)
-      }   
+      if(self.devMode == true)
+      {
+        document.getElementById("productionusage-button-testItm").onclick = function(){
+          var e = new Object()        
+          e.value = "0199004699954211151805263010"
+          //e.value = "0104002540351907151805263010"
+          //e.value = "010400254035190715181113100011946474"
+          self.barcodeReady(e)
+        }   
 
-      document.getElementById("productionusage-button-testLot").onclick = function(){
-        var e = new Object()
-        e.value = "100003470970008" + self.FNC1 + "310301000090K3"
-        self.barcodeReady(e)
-      }  
+        document.getElementById("productionusage-button-testLot").onclick = function(){
+          var e = new Object()
+          self.lotFrom            = "LO1710M10001"  
+          e.value = "100003470970008" + self.FNC1 + "310301000090K3"
+          self.barcodeReady(e)
+        }  
+        document.getElementById("productionusage-button-testLot2").onclick = function(){
+          var e = new Object()
+          self.lotFrom            = "LO1710M10002"  
+          e.value = "100003470970008" + self.FNC1 + "310301000090K3"
+          self.barcodeReady(e)
+        } 
+      }
+      else
+      {
+        document.getElementById("productionusage-button-testItm").style.display = 'none'
+        document.getElementById("productionusage-button-testLot").style.display = 'none'
+        document.getElementById("productionusage-button-testLot2").style.display = 'none'
+      }
 
     })
 
@@ -170,8 +191,14 @@
     postingError(_error)
     {
       self.setScanType(0)
-      self.setScanError("Buchen fehlgeschlagen: " + _error)
+      //self.setScanError("Buchen fehlgeschlagen: " + _error)
+      self.setScanError(_error)
       application.audioError()
+    }
+
+    postingSuccess(_data)
+    {
+      self.setScanInfo("Abgang gebucht")
     }
 
     isEmpty(_val)
@@ -236,8 +263,9 @@
           {
             if(application.getAppSettings().PRODUSAGE_AUTOCONFIRMPOST == true)
             {              
-              self.post().then(function(){                
+              self.post().then(function(_data){                
                 self.setScanType(0)
+                self.postingSuccess(_data)
               }).catch(function(_error){    
                 self.postingLock = true                            
                 self.postingError(_error)
@@ -268,12 +296,12 @@
       if(self.isPostingAllowed() == false)
         return
 
-      return new Promise(function(_resolve, _reject){	
-        application.sageX3Connector.moduleProductionUsage.createAndPostItemUsage(self.scancodeData.ITMREF, self.scancodeData.QTYSTU, "", self.scancodeData.LOT).then(function(_result){
-          _resolve()
+      return new Promise(function(_resolve, _reject){	        
+        application.sageX3Connector.moduleProductionUsage.createAndPostItemUsage(self.scancodeData.ITMREF, self.scancodeData.QTYSTU, self.lotFrom, self.scancodeData.LOT).then(function(_result){
+          _resolve(_result)
         }).catch(function(_error)
         {
-          _reject()
+          _reject(_error)
         })
       })
     }
@@ -354,18 +382,33 @@
 
     setScanError(_scanError)
     {
-      self.scanErrorText = _scanError
-      if(self.scanErrorText == "")
+      self.setScanInfo(_scanError, true)     
+    }
+
+
+    setScanInfo(_info, _isError = false)
+    {
+      self.scanInfoText = _info
+      if(self.scanInfoText == "")
       {
-        document.getElementById("productionusage-scanError").style.visibility = 'hidden'
+        document.getElementById("productionusage-scanInfo").style.visibility = 'hidden'
       }
       else
       {
-        document.getElementById("productionusage-scanError").style.visibility = 'visible'
-        application.audioError()
+        document.getElementById("productionusage-scanInfo").style.visibility = 'visible'
+        if(_isError)
+          application.audioError()
       }
+
+      if(_isError)
+        document.getElementById("productionusage-scanInfo").style.color = 'red'
+      else
+        document.getElementById("productionusage-scanInfo").style.color = 'green'
+
       self.update()
     }
+
+    
 
 
     name(){
