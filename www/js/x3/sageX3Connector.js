@@ -20,6 +20,7 @@ class SageX3Connector
         // modules
         this.modulePicking              =  new SageX3Connector_Picking(this);
         this.moduleProductionUsage      =  new SageX3Connector_ProductionUsage(this);
+        this.modulePackaging            =  new SageX3Connector_Packaging(this);
     }
 
     /**

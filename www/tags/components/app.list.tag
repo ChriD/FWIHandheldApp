@@ -9,7 +9,7 @@
   <script>
     var self = this
     
-    self.menuItemTagName = self.opts.menuitemtag
+    self.itemTagName = self.opts.itemtag
     self.currentSelectedItemId = ""
     self.currentSelectedDataIdx = -1
     self.listData = null
@@ -27,15 +27,23 @@
       if(!self.listData)
         return;
 
-      for(var i=0; i<self.listData.length; i++) 
-      {          
-          var childTagOptions = new Object()
-          childTagOptions.listItemData = self.listData[i]
-          var tagElement = document.createElement(self.menuItemTagName)
-          tagElement.id = self.getListItemId(self.listData[i].id);
-          tagElement.dataset.idx = i;
-          riot.mount(tagElement, self.menuItemTagName, childTagOptions)  
-          self.root.appendChild(tagElement) 
+      try
+      {
+
+        for(var i=0; i<self.listData.length; i++) 
+        {          
+            var childTagOptions = new Object()
+            childTagOptions.listItemData = self.listData[i]
+            var tagElement = document.createElement(self.itemTagName)
+            tagElement.id = self.getListItemId(self.listData[i].id);
+            tagElement.dataset.idx = i;
+            riot.mount(tagElement, self.itemTagName, childTagOptions)  
+            self.root.appendChild(tagElement) 
+        }
+      }
+      catch(_e)
+      {
+        application.logError(_e.toString())
       }
     }
 

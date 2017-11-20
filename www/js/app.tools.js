@@ -118,3 +118,88 @@ class AppTools
     }	
     
 }
+
+
+
+
+Date.prototype.addDays = function(days) {
+    var dat = new Date(this.valueOf());
+    dat.setDate(dat.getDate() + days);
+    return dat;
+  }
+  
+  
+  function stringToDate(_date,_format,_delimiter)
+  {
+      var formatLowerCase=_format.toLowerCase();
+      var formatItems=formatLowerCase.split(_delimiter);
+      var dateItems=_date.split(_delimiter);
+      var monthIndex=formatItems.indexOf("mm");
+      var dayIndex=formatItems.indexOf("dd");
+      var yearIndex=formatItems.indexOf("yyyy");
+      var month=parseInt(dateItems[monthIndex]);
+      month-=1;
+      var formatedDate = new Date(dateItems[yearIndex],month,dateItems[dayIndex]);
+      return formatedDate;
+  }
+  
+  function X3DateStringToDate(_date)
+  {
+      if(!_date)
+          return null;
+      var date = _date.substr(0,4) + "-" + _date.substr(4,2) + "-" + _date.substr(6,2)
+      return stringToDate(date, "yyyy-mm-dd", "-")	
+  }
+  
+  function dateToX3DateString(_date)
+  {	
+      if(!_date)
+          return "";		
+      var datestring = _date.getFullYear() + ("0"+(_date.getMonth()+1)).slice(-2) +("0" + _date.getDate()).slice(-2);
+      return datestring;
+  }
+  
+  function X3DateStringReadableString(_date)
+  {
+      if(!_date)
+          return "";
+      var date =  _date.substr(6,2)  + "." + _date.substr(4,2) + "." + _date.substr(0,4);
+      return date;	
+  }
+  
+  function date2string(_date)
+  {
+      if(!_date)
+          return "";		
+      var datestring = ("0" + _date.getDate()).slice(-2) + "." + ("0"+(_date.getMonth()+1)).slice(-2) + "." + _date.getFullYear();
+      return datestring;
+  }
+  
+  function escapeJSONValue(_value)
+  {
+      return _value
+          .replace(/[\\]/g, '\\\\')
+          .replace(/[\"]/g, '\\\"')
+          .replace(/[\/]/g, '\\/')
+          .replace(/[\b]/g, '\\b')
+          .replace(/[\f]/g, '\\f')
+          .replace(/[\n]/g, '\\n')
+          .replace(/[\r]/g, '\\r')
+          .replace(/[\t]/g, '\\t'); 
+  }
+  
+  function generateUniqueNumber()
+  {
+      var d = new Date().getTime();
+      if(window.performance && typeof window.performance.now === "function"){
+          d += performance.now(); //use high-precision timer if available
+      }
+      var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+          var r = (d + Math.random()*16)%16 | 0;
+          d = Math.floor(d/16);
+          return (c=='x' ? r : (r&0x3|0x8)).toString(16);
+      });
+      return uuid;
+  }
+  
+  

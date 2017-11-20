@@ -110,7 +110,7 @@
     this.scancodeData       = new Object()   
     this.postingLock        = true    
     this.lotFrom            = ""  
-    this.devMode            = true
+    this.devMode            = false
 
     // every view tag needs to callback the mounted method so the <app-view> tag will know when its only child is mounted
     this.on('mount', () => {      
@@ -139,6 +139,7 @@
           e.value = "0199004699954211151805263010"
           //e.value = "0104002540351907151805263010"
           //e.value = "010400254035190715181113100011946474"
+          e.value = "01040025403519071518111310001194647"
           self.barcodeReady(e)
         }   
 

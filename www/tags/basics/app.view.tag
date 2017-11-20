@@ -19,6 +19,7 @@
     this.isCurrentlyAnimated = false;
     this.isEnterAnimation = false;
     this.isLeaveAnimation = false;
+    this.params = null;
   
 
     this.on('mount', () => {           
@@ -63,7 +64,7 @@
         if(self.isLeaveAnimation)
           self.left();  
         if(self.isEnterAnimation)
-          self.entered();  
+          self.entered(self.params);  
 
         self.isCurrentlyAnimated = false; 
         self.isEnterAnimation = false
@@ -127,7 +128,8 @@
     /**
      * will be called by the <app-views> element when it want's the view to be visible     
      */
-    enter() {           
+    enter(_params = null) {    
+      self.params = _params       
       self.trigger("enter")
       //self.viewTag.trigger("enter")
       self.root.style.display = "block";
@@ -138,7 +140,7 @@
       if(self.animationEnter)      
         self.root.classList.add(self.animationEnter)              
       else
-        self.entered();      
+        self.entered(self.params);      
     }
     
     /**
@@ -169,13 +171,13 @@
     /**
      * will be called when the 'enter' transition will be finished
      */
-    entered() {
+    entered(_params = null) {
         self.root.style.zIndex = "1";                
         // make the view focusable and focus 
         //self.root.firstChild.tabIndex = "1"
         self.root.firstChild.focus();
         // reroute the 'entered' event to the 'real' view
-        self.root.firstChild._tag.trigger("entered")
+        self.root.firstChild._tag.trigger("entered", _params)
     }
 
   </script>  

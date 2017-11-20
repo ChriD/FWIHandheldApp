@@ -37,7 +37,7 @@
     }
     
 
-    changeView(_viewId, _force = false) {
+    changeView(_viewId, _force = false, _params = null) {
       // get first view of childs when the currentViewId is empty, this is the one we will show when we do first mount our view
       if(!_viewId)      
         _viewId = self.getFirstViewElementId();
@@ -63,7 +63,7 @@
           var viewElement = document.getElementById(_viewId)          
           if(viewElement)
           {
-            viewElement._tag.enter()
+            viewElement._tag.enter(_params)
             self.trigger("changeView", _viewId)
           }
         }
