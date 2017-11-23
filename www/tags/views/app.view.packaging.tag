@@ -16,7 +16,7 @@
   <script>
     var self = this;
 
-    var listData = [  { 'id' : '1', 'viewTagName' : 'app-view-packaging-packlist',      'text' : 'Neue Palette',        'infoText' : '', 'shortcutText' : 'F1'},
+    var listData = [  { 'id' : '1', 'viewTagName' : 'app-view-packaging-packlist',      'text' : 'Neue Palette',         'infoText' : '', 'shortcutText' : 'F1'},
                       { 'id' : '2', 'viewTagName' : 'app-view-packaging-packlistsel',   'text' : 'Palette bearbeiten',   'infoText' : '', 'shortcutText' : 'F2'}
                    ]
     // every view tag needs to callback the mounted method so the <app-view> tag will know when its only child is mounted

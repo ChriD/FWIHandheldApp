@@ -53,7 +53,8 @@
 
 
     barcodeReady(_data)
-    {            
+    {     
+      // TODO: Allow scan of SSCC and if valid open this pallet!       
     }
 
 
@@ -63,9 +64,7 @@
 
     readList()
     {
-          
-      application.setBusy(true)
-      
+      application.setBusy(true) 
       application.sageX3Connector.modulePackaging.getUseablePackages(true, true, true, new Date()).then(function(_result){
         self.updateListData(_result)           
         application.setBusy(false)

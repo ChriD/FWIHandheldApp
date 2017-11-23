@@ -12,6 +12,7 @@
         <app-view id="app-view-packaging"               viewTag="app-view-packaging"></app-view>
         <app-view id="app-view-packaging-packlist"      viewTag="app-view-packaging-packlist"></app-view>
         <app-view id="app-view-packaging-packlistsel"   viewTag="app-view-packaging-packlistsel"></app-view>
+        <app-view id="app-view-packaging-newpack"       viewTag="app-view-packaging-newpack"></app-view>
       </app-views>      
       
     </div>        

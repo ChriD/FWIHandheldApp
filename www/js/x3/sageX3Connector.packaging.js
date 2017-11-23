@@ -65,7 +65,7 @@ class SageX3Connector_Packaging
 			var jsonParameters = 
 				{
 					"SELECTION" :	{
-										"SSCCPCSUMCRIT"  	: _ssccpcsum										
+										"SSCCPCPARENTCRIT"  	: _ssccpcsum										
 									}
 				}   
 				           						
@@ -95,7 +95,7 @@ class SageX3Connector_Packaging
 
 
 	
-	createSSCCHeader(_isacc = true) 
+	createSSCCHeader(_isacc, _unit, _fcy) 
     {		
 		self = this;
 		return new Promise(function(_resolve, _reject){
@@ -107,13 +107,47 @@ class SageX3Connector_Packaging
 
 			var jsonParameters = 
 				{
-					"INPUT" :		{
-										"PRHNUM"  		: _prhnum,
-										"ISACC" 		: _isacc,
-										"SSCCPCSUM"		: _ssccpcsum
+					"INPUT" :		{										
+										"ISACC" 	: _isacc,
+										"UNIT"		: _unit,
+										"FCY"		: _fcy
 									}
 				};               						
-			self.sageX3Connector.callSubprog("PICK|CREATESSCCHEADER|", "XFPACK_CSS", jsonParameters, true, function(_requestId, _data, _error)
+			self.sageX3Connector.callSubprog("PACK|CREATESSCCHEADER|", "XFPACK_CSS", jsonParameters, true, function(_requestId, _data, _error)
+            {
+                if(_error)
+				{
+					_reject(_data);
+				}
+				else
+				{
+					var jsonData = self.sageX3Connector.getArrayDataFromJson(_data, "RESULT");								
+                	if(jsonData.ERROR)
+						_reject(jsonData.ERROR);
+					else
+					{
+						var jsonObject = self.sageX3Connector.getArrayDataFromJson(_data, "RESULT");
+						_resolve(jsonObject);				
+					}
+				}
+			});            
+		});
+	}
+	
+
+	packlistBarcodeScanned(_ssccpc, _barcode) 
+    {		
+		self = this;
+		return new Promise(function(_resolve, _reject){
+
+			var jsonParameters = 
+				{
+					"INPUT" :		{	
+										"SSCCPCPARENT" 	: _ssccpc,
+										"BARCODE" 		: _barcode
+									}
+				};               						
+			self.sageX3Connector.callSubprog("PACK|PACKLISTBARCODESCANNED|", "XFPACK_PBS", jsonParameters, true, function(_requestId, _data, _error)
             {
                 if(_error)
 				{
