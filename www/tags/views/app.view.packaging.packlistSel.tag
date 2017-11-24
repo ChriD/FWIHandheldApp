@@ -7,7 +7,7 @@
     </div>
     <div class="view-buttonrow buttonRow">
       <button id="packaging-packlistsel-button-next"    class="borderRight" style="width: 49%;"></button>
-      <button id="packaging-packlistsel-button-cancel"  class=""            style="width: 49%;">Abbrechen</button>
+      <button id="packaging-packlistsel-button-cancel"  class=""            style="width: 49%;">Zurück</button>
     </div>   
 
   <style>  
@@ -21,7 +21,7 @@
       if(self.opts.mountedCallback)
         self.opts.mountedCallback();        
       
-      document.getElementById("packaging-packlistsel-button-next").onclick = function(){               
+      document.getElementById("packaging-packlistsel-button-next").onclick = function(){        
       }        
       document.getElementById("packaging-packlistsel-button-cancel").onclick = function(){                        
         application.getMainViewContainer().showPrevView();
@@ -82,14 +82,15 @@
         application.logInfo("Keine Daten vorhanden")
         _listData = new Array()        
       }
-      _listData.push({ 'SSCCCOD' : 'Neue Palette', 'SSCCPC' : '' })
+      _listData.push({ 'SSCCCOD' : 'Neue Palette', 'SSCCPC' : '', 'ISCLOSED' : '0' })
 
       var listComponent = document.getElementById("app-list-palsel")
       listComponent._tag.setListData(_listData)
       listComponent._tag.selectionCallback = function(_itemData){
         var params = new Object()
         params.calledBy = "app-view-packaging-packlistsel"
-        params.SSCCPC = _itemData.SSCCPC         
+        params.SSCCPC   = _itemData.SSCCPC         
+        params.isClosed = _itemData.ISCLOSED == "0" ? false : true
         application.changeAppView("app-view-packaging-packlist", params);
       }      
     }                 

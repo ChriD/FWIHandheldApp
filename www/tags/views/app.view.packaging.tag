@@ -7,7 +7,7 @@
     </div>
     <div class="view-buttonrow buttonRow">
       <button id="packaging-button-next"    class="borderRight" style="width: 49%;"></button>
-      <button id="packaging-button-cancel"  class=""            style="width: 49%;">Abbrechen</button>
+      <button id="packaging-button-cancel"  class=""            style="width: 49%;">Zurück</button>
     </div>   
 
   <style>  
@@ -43,9 +43,26 @@
     })
 
 
-    this.on('handleKey', (_e) => {            
-    })   
 
+    this.on('handleKey', (_e) => {            
+      var listComponent = document.getElementById("app-list-packaging")   
+      if(listComponent)
+        listComponent._tag.trigger("handleKey", _e) 
+
+      if(!_e.isPropagationStopped)
+      {
+        // Handle F(x) keys!
+        if(_e.keyCode == 112) { // F1
+          application.changeAppView("app-view-packaging-packlist") 
+          _e.isPropagationStopped = true    
+        }
+        if(_e.keyCode == 113) { // F2     
+          application.changeAppView("app-view-packaging-packlistsel") 
+          _e.isPropagationStopped = true          
+        }
+      }            
+
+    })
 
     this.on('requestPrevViewId', (_args) => {       
       _args.viewId  = "app-view-home"

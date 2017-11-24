@@ -2,9 +2,12 @@
 
   <div class="item">   
     <div class="left">  
-       { packnr } 
+      { packnr } 
     </div>
-    <div class="right">      
+    <div class="right">
+      <div class="centerAll">   
+        { packUnit }    
+      <div>
     </div>
   </div>
 
@@ -28,11 +31,20 @@
       flex: 1 1 4em;
       position: relative;
     }
+
+    .centerAll {
+      width: 100%; 
+      height: 100%;                            
+      display: flex;
+      /*align-items: center;*/
+      justify-content: flex-end;
+    }
   </style>
 
   <script>
     var self = this
     self.packnr         = this.opts.listItemData.SSCCCOD
+    self.packUnit       = this.opts.listItemData.SSCCUNIT
 
     this.on('mount', () => {         
       self.root.firstChild.onclick = function(){                        

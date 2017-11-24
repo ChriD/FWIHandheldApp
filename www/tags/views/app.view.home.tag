@@ -23,7 +23,7 @@
         self.opts.mountedCallback();    
 
       var listComponent = document.getElementById("app-list-main")
-      listComponent._tag.setListData(mainMenuListData)
+      listComponent._tag.setListData(mainMenuListData)      
       listComponent._tag.selectionCallback = function(_itemData){        
         if(_itemData.viewTagName)
         {

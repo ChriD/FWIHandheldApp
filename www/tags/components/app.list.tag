@@ -67,7 +67,7 @@
     selectListItemIdx(_idx)
     {
       // remove the old selection
-      var elements = document.querySelectorAll("[data-idx='" + self.currentSelectedDataIdx + "']")
+      var elements = document.querySelectorAll("[data-idx='" + _idx + "']")
       if (elements.length)
       {
         var childElements = elements[0].getElementsByTagName("*")

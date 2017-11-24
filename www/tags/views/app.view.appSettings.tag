@@ -37,6 +37,10 @@
             <div>Produktionsverbrauch autom. buchen</div>
             <div><input type="checkbox" id="SETTINGS_PRODUSAGE_AUTOCONFIRMPOST" data-id="PRODUSAGE_AUTOCONFIRMPOST"></input></div>
           </div>
+          <div class="settingsItem">
+            <div>VP-Einheiten für Anlage</div>
+            <div><input type="text" id="SETTINGS_PACKLIST_PARENTPACKUNITS" data-id="PACKLIST_PARENTPACKUNITS"></input></div>
+          </div>
 
         </div>
       </div>

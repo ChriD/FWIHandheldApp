@@ -28,7 +28,8 @@ class AppHandheld_Moser extends AppHandheld
         this.barcodeReader.parmLogger(this.parmLogger())
         this.barcodeReader.init();
 
-        this.errorSound = new Howl({ src: ['sound/error3.wav'], volume: 1.0 });
+        this.errorSound     = new Howl({ src: ['sound/error3.wav'], volume: 1.0 });
+        this.attentionSound = new Howl({ src: ['sound/attention.wav'], volume: 1.0 });
     }
 
     exitApp()
@@ -117,6 +118,13 @@ class AppHandheld_Moser extends AppHandheld
     {     
         if(this.errorSound)
             this.errorSound.play()
+    }
+
+
+    audioAttention()
+    {     
+        if(this.attentionSound)
+            this.attentionSound.play()
     }
 
 }
