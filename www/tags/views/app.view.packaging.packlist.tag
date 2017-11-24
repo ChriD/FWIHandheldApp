@@ -83,18 +83,37 @@
         switch(self.curListStatus)
         {                     
             // current status is open. we have to close the list
-            case 2:
-              // TODO: @@@
+            case 2:              
+              application.setBusy(true)
+              application.sageX3Connector.modulePackaging.closeSSCCHeader(self.curSSCCPC).then(function(_result){        
+                self.setListStatus(3)
+                self.updateInfo()
+                self.update()
+                application.setBusy(false)
+                application.getMainViewContainer().showPrevView()
+              }).catch(function(_error){         
+                application.logError(_error.toString())
+                application.setBusy(false)
+              })   
               break;
             // current status is closed. we have to open the list
             case 3:
-              // TODO: @@@
+              application.setBusy(true)
+              application.sageX3Connector.modulePackaging.reopenSSCCHeader(self.curSSCCPC).then(function(_result){        
+                self.setListStatus(2)
+                self.updateInfo()
+                self.update()
+                application.setBusy(false)        
+              }).catch(function(_error){         
+                application.logError(_error.toString())
+                application.setBusy(false)
+              })   
               break;              
         }               
       }  
       
       document.getElementById("packaging-packlist-button-cancel").onclick = function(){                        
-        application.getMainViewContainer().showPrevView();
+        application.getMainViewContainer().showPrevView()
       }   
 
       // TEST -->      
@@ -169,7 +188,9 @@
       } 
 
       if(_params && _params.isClosed)
-        self.setListStatus(3)     
+        self.setListStatus(3)  
+      if(_params && !_params.isClosed)
+        self.setListStatus(2)     
 
       self.readList() 
       self.updateInfo()

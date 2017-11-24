@@ -2,7 +2,7 @@
   
    <div class="view-content">
       <div id="packaging_packlistsel_container" class="view-contentContainer">        
-        <app-list itemtag="app-list-packitem" id="app-list-palsel"></app-list>
+        <app-list itemtag="app-list-packitemsel" id="app-list-palsel"></app-list>
       </div>
     </div>
     <div class="view-buttonrow buttonRow">
@@ -54,7 +54,22 @@
 
     barcodeReady(_data)
     {     
-      // TODO: Allow scan of SSCC and if valid open this pallet!       
+      // TODO: Allow scan of SSCC and if valid open this pallet! 
+      // we do ask the backend for the pallet so we may open pallets that show not up in list?
+      // here we may give some info to the user that the pallet is not ready to open?
+      // TODO: @@@      
+      application.setBusy(true) 
+      application.sageX3Connector.modulePackaging.selectionBarcodeScanned(_data, false).then(function(_result){
+        if(_result.ISALLOWED = "1")
+          application.changeAppView("app-view-packaging-packlist", self.createParam(_result.SSCCPC, _result.ISCLOSED))
+        //else
+          // TODO: @@@ log to visible!!! 
+        application.setBusy(false)
+      }).catch(function(_error){        
+        // TODO: @@@ log to visible!!! 
+        application.logError(_error.toString())
+        application.setBusy(false)
+      })  
     }
 
 
@@ -87,13 +102,18 @@
       var listComponent = document.getElementById("app-list-palsel")
       listComponent._tag.setListData(_listData)
       listComponent._tag.selectionCallback = function(_itemData){
-        var params = new Object()
-        params.calledBy = "app-view-packaging-packlistsel"
-        params.SSCCPC   = _itemData.SSCCPC         
-        params.isClosed = _itemData.ISCLOSED == "0" ? false : true
-        application.changeAppView("app-view-packaging-packlist", params);
+        application.changeAppView("app-view-packaging-packlist", self.createParam(_itemData.SSCCPC, _itemData.ISCLOSED));
       }      
     }                 
+
+    createParam(_ssccpc, _isclosed)
+    {
+        var params = new Object()
+        params.calledBy = "app-view-packaging-packlistsel"
+        params.SSCCPC   = _ssccpc         
+        params.isClosed = _isclosed == "0" ? false : true
+        return params;
+    }
 
 
   </script>  

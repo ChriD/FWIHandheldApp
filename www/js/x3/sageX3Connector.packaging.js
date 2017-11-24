@@ -166,7 +166,105 @@ class SageX3Connector_Packaging
 				}
 			});            
 		});
-    }
+	}
+	
+
+	closeSSCCHeader(_ssccpc) 
+    {		
+		self = this;
+		return new Promise(function(_resolve, _reject){
+			var jsonParameters = 
+				{
+					"INPUT" :		{										
+										"SSCCPC" 	: _ssccpc										
+									}
+				};               						
+			self.sageX3Connector.callSubprog("PACK|CLOSESSCCHEADER|", "XFPACK_CLS", jsonParameters, true, function(_requestId, _data, _error)
+            {
+                if(_error)
+				{
+					_reject(_data);
+				}
+				else
+				{
+					var jsonData = self.sageX3Connector.getArrayDataFromJson(_data, "RESULT");								
+                	if(jsonData.ERROR)
+						_reject(jsonData.ERROR);
+					else
+					{
+						var jsonObject = self.sageX3Connector.getArrayDataFromJson(_data, "RESULT");
+						_resolve(jsonObject);				
+					}
+				}
+			});            
+		});
+	}
+
+
+	reopenSSCCHeader(_ssccpc) 
+    {		
+		self = this;
+		return new Promise(function(_resolve, _reject){
+			var jsonParameters = 
+				{
+					"INPUT" :		{										
+										"SSCCPC" 	: _ssccpc										
+									}
+				};               						
+			self.sageX3Connector.callSubprog("PACK|REOPENSSCCHEADER|", "XFPACK_ROS", jsonParameters, true, function(_requestId, _data, _error)
+            {
+                if(_error)
+				{
+					_reject(_data);
+				}
+				else
+				{
+					var jsonData = self.sageX3Connector.getArrayDataFromJson(_data, "RESULT");								
+                	if(jsonData.ERROR)
+						_reject(jsonData.ERROR);
+					else
+					{
+						var jsonObject = self.sageX3Connector.getArrayDataFromJson(_data, "RESULT");
+						_resolve(jsonObject);				
+					}
+				}
+			});            
+		});
+	}
+
+
+	selectionBarcodeScanned(_barcode, _anyallowed = false) 
+    {		
+		self = this;
+		return new Promise(function(_resolve, _reject){
+			var jsonParameters = 
+				{
+					"INPUT" :		{										
+										"BARCODE" 	: _ssccpc,
+										"ANYALLOWED": _anyallowed ? "1" : "0"									
+									}
+				};               						
+			self.sageX3Connector.callSubprog("PACK|SELECTIONBARCODESCANNED|", "XFPACK_SBS", jsonParameters, true, function(_requestId, _data, _error)
+            {
+                if(_error)
+				{
+					_reject(_data);
+				}
+				else
+				{
+					var jsonData = self.sageX3Connector.getArrayDataFromJson(_data, "RESULT");								
+                	if(jsonData.ERROR)
+						_reject(jsonData.ERROR);
+					else
+					{
+						var jsonObject = self.sageX3Connector.getArrayDataFromJson(_data, "RESULT");
+						_resolve(jsonObject);				
+					}
+				}
+			});            
+		});
+	}
+	
     
 }
                
