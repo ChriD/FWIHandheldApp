@@ -42,6 +42,15 @@
             <div><input type="text" id="SETTINGS_PACKLIST_PARENTPACKUNITS" data-id="PACKLIST_PARENTPACKUNITS"></input></div>
           </div>
 
+          <div class="settingsItem">
+            <div>Etikettdrucker ID</div>
+            <div><input type="text" id="SETTINGS_PACKLIST_PRINTER_ETISSCC_ID" data-id="PACKLIST_PRINTER_ETISSCC_ID"></input></div>
+          </div>
+          <div class="settingsItem">
+            <div>Template ID</div>
+            <div><input type="text" id="SETTINGS_PACKLIST_PRINTER_ETISSCC_TMPL" data-id="PACKLIST_PRINTER_ETISSCC_TMPL"></input></div>
+          </div>
+
         </div>
       </div>
 

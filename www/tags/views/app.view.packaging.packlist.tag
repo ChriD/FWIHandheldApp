@@ -72,7 +72,8 @@
     self.scanInfoText     = ""
     self.unitListData     = new Array();
     self.listActionButtonText = ""
-    self.curListStatus = 0
+    self.curListStatus    = 0
+    self.FNC1             = '\u001d' 
 
     // every view tag needs to callback the mounted method so the <app-view> tag will know when its only child is mounted
     this.on('mount', () => {      
@@ -111,6 +112,10 @@
               break;              
         }               
       }  
+
+      document.getElementById("packaging-packlist-scanPrompter").onclick = function(){                        
+        self.printCurSSCCLabel()
+      }   
       
       document.getElementById("packaging-packlist-button-cancel").onclick = function(){                        
         application.getMainViewContainer().showPrevView()
@@ -144,12 +149,19 @@
 
       if(!_e.isPropagationStopped)
       {
-        // Handle F(x) keys! TODO: @@@
+        // Handle F(x) keys!
         if(_e.keyCode >= 112 && _e.keyCode < (112 + self.unitListData.length))
         {
           self.createSSCC(self.unitListData[(_e.keyCode-112)].unit)
           _e.isPropagationStopped = true 
-        }        
+        }   
+
+        if(_e.keyCode == 0) // TODO: @@@duch  
+        {
+          // print sscc label
+          self.printCurSSCCLabel()         
+        }
+
       }                    
     })   
 
@@ -219,6 +231,9 @@
         self.scanPrompterText = "Bitte Typ auswählen"
       else
         self.scanPrompterText = "Bitte Packstück scannen"
+
+      if(self.curListStatus == 3)
+        self.scanPrompterText = "Etikett drucken (PRNT)"
     }
 
     createSSCC(_unit)
@@ -231,10 +246,42 @@
         self.updateInfo()
         application.setBusy(false)
         self.update()
+        // print sscc label
+        self.printCurSSCCLabel()
       }).catch(function(_error){         
         application.logError(_error.toString())
         application.setBusy(false)
       })     
+    }
+
+
+    printSSCCLabel(_ssccPc, _copies = 1)
+    {
+      self = this;
+      
+      if(!application.getAppSettings().SETTINGS_PACKLIST_PRINTER_ETISSCC_ID)
+        return Promise.reject("No printer Id for sscc label specified")
+
+      if(!application.getAppSettings().SETTINGS_PACKLIST_PRINTER_ETISSCC_TMPL)
+        return Promise.reject("No printer template for sscc label specified")	
+
+      return new Promise(function(_resolve, _reject){	
+        self.app.sageX3Connector.modulePackaging.printDocument(application.getAppSettings().SETTINGS_PACKLIST_PRINTER_ETISSCC_ID, application.getAppSettings().SETTINGS_PACKLIST_PRINTER_ETISSCC_TMPL, "SSCCLABEL", _ssccPc, _copies).then(function(_data){					
+          _resolve(_data);
+        }).catch(function(_data){
+          _reject(_data)
+        });
+      });
+    }
+
+
+    printCurSSCCLabel()
+    {
+      self.printSSCCLabel(self.curSSCCPC).then(function(){
+        // all ok, thats good, nothing to do
+      }).catch(function(_error){
+        self.setScanInfo("Fehler beim Drucken von Etikett: " + _error.toString() , true)
+      })
     }
 
 
@@ -317,10 +364,9 @@
       // Allow barcode scanning if we do have a valid master sscc
       if(self.noSSCC == false)
       {        
-        // if sscc already exists it will be removed, otherwise it will be added to the master (this will be done in the backend)
-        // backend.barcodeScanned(sscccode,)        
-        application.setBusy(true)      
-        application.sageX3Connector.modulePackaging.packlistBarcodeScanned(self.curSSCCPC, _data.value).then(function(_result){ 
+        // if sscc already exists it will be removed, otherwise it will be added to the master (this will be done in the backend)        
+        application.setBusy(true)              
+        application.sageX3Connector.modulePackaging.packlistBarcodeScanned(self.curSSCCPC, _data.value, _data.type, 1, 1, self.FNC1).then(function(_result){ 
           if(_result.SSCCACTION == "ADD")
             self.setScanInfo("Packstück hinzugefügt", false)
           if(_result.SSCCACTION == "REMOVE")  

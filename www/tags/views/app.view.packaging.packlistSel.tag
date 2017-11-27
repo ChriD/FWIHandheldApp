@@ -14,14 +14,20 @@
   </style>
 
   <script>
-    var self = this;
+    var self      = this
+    self.FNC1     = '\u001d' 
+    self.devMode  = true
     
     // every view tag needs to callback the mounted method so the <app-view> tag will know when its only child is mounted
     this.on('mount', () => {      
       if(self.opts.mountedCallback)
         self.opts.mountedCallback();        
       
-      document.getElementById("packaging-packlistsel-button-next").onclick = function(){        
+      document.getElementById("packaging-packlistsel-button-next").onclick = function(){
+        if(self.devMode)
+        {
+          self.barcodeReady("00390078440000004197")
+        }
       }        
       document.getElementById("packaging-packlistsel-button-cancel").onclick = function(){                        
         application.getMainViewContainer().showPrevView();
@@ -29,7 +35,10 @@
     })
 
 
-    this.on('handleKey', (_e) => {            
+    this.on('handleKey', (_e) => {         
+      var listComponent = document.getElementById("app-list-palsel")      
+      if(listComponent)
+        listComponent._tag.trigger("handleKey", _e)          
     })   
 
 
@@ -58,8 +67,8 @@
       // we do ask the backend for the pallet so we may open pallets that show not up in list?
       // here we may give some info to the user that the pallet is not ready to open?
       // TODO: @@@      
-      application.setBusy(true) 
-      application.sageX3Connector.modulePackaging.selectionBarcodeScanned(_data, false).then(function(_result){
+      application.setBusy(true)             
+      application.sageX3Connector.modulePackaging.selectionBarcodeScanned(_data.value, _data.type, 1, 1, self.FNC1).then(function(_result){
         if(_result.ISALLOWED = "1")
           application.changeAppView("app-view-packaging-packlist", self.createParam(_result.SSCCPC, _result.ISCLOSED))
         //else

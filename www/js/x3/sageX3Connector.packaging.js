@@ -135,7 +135,7 @@ class SageX3Connector_Packaging
 	}
 	
 
-	packlistBarcodeScanned(_ssccpc, _barcode) 
+	packlistBarcodeScanned(_ssccpc, _barcode, _scancodeType, _addprefix = 1, _checkprefix = 1, _fnc1 = "") 
     {		
 		self = this;
 		return new Promise(function(_resolve, _reject){
@@ -144,7 +144,11 @@ class SageX3Connector_Packaging
 				{
 					"INPUT" :		{	
 										"SSCCPCPARENT" 	: _ssccpc,
-										"BARCODE" 		: _barcode
+										"BARCODE" 		: _barcode,
+										"SCANCODETYPE"  : _scancodeType,
+										"ADDPREFIX"  	: _addprefix,
+										"CHECKPREFIX"  	: _checkprefix,
+										"FNC1"			: _fnc1	
 									}
 				};               						
 			self.sageX3Connector.callSubprog("PACK|PACKLISTBARCODESCANNED|", "XFPACK_PBS", jsonParameters, true, function(_requestId, _data, _error)
@@ -233,15 +237,19 @@ class SageX3Connector_Packaging
 	}
 
 
-	selectionBarcodeScanned(_barcode, _anyallowed = false) 
+	selectionBarcodeScanned(_barcode, _anyallowed = false, _scancode, _scancodeType, _addprefix = 1, _checkprefix = 1, _fnc1 = "") 
     {		
 		self = this;
 		return new Promise(function(_resolve, _reject){
 			var jsonParameters = 
 				{
 					"INPUT" :		{										
-										"BARCODE" 	: _ssccpc,
-										"ANYALLOWED": _anyallowed ? "1" : "0"									
+										"BARCODE" 		: _barcode,
+										"ANYALLOWED"	: _anyallowed ? "1" : "0",
+										"SCANCODETYPE"  : _scancodeType,
+										"ADDPREFIX"  	: _addprefix,
+										"CHECKPREFIX"  	: _checkprefix,
+										"FNC1"			: _fnc1									
 									}
 				};               						
 			self.sageX3Connector.callSubprog("PACK|SELECTIONBARCODESCANNED|", "XFPACK_SBS", jsonParameters, true, function(_requestId, _data, _error)
@@ -264,6 +272,50 @@ class SageX3Connector_Packaging
 			});            
 		});
 	}
+
+
+	/**
+	 * print a dcoument
+	 * @param {string} printer id
+	 * @param {string} printer template (may be empty)
+	 * @param {string} document id which should be printed
+	 * @param {string} document num which should be printed
+	 * @param {integer} copies of the document
+	 * @return a promise
+	 */ 
+	printDocument(_printerId, _printerTemplate, _documentId, _documentNum, _copies)
+	{		
+		self = this;
+		return new Promise(function(_resolve, _reject){			
+			var jsonParameters = 
+				{
+					"INPUT" :		{
+										"PRINTERID"  		: _printerId,
+										"PRINTERTEMPLATE"	: _printerTemplate,
+										"DOCUMENTID"		: _documentId,
+										"DOCUMENTNUM"		: _documentNum,
+										"COPIES"			: _copies
+									}
+				};               						
+			self.sageX3Connector.callSubprog("PICK|PRINTDOC|", "XFPACK_PRI", jsonParameters, true, function(_requestId, _data, _error)
+			{
+				if(_error)
+				{
+					_reject(_data);
+				}
+				else
+				{
+					var jsonData = self.sageX3Connector.getArrayDataFromJson(_data, "RESULT");								
+					if(jsonData.ERROR)
+						_reject(jsonData.ERROR);
+					else
+					{						
+						_resolve(jsonData);				
+					}
+				}
+			});            
+		});
+    }
 	
     
 }

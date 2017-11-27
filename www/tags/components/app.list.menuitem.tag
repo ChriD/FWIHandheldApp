@@ -12,7 +12,7 @@
 
   <style>   
     .menuItem {
-      padding: 0.8em 1.0em 0.8em 1.0em;
+      padding: 1.2em 1.0em 1.2em 1.0em;
       border-bottom: 1px solid grey;
       display: flex;
     }

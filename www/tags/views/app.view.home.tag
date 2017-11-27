@@ -8,14 +8,14 @@
   <script>  
     var self = this;
 
-    var mainMenuListData = [  { 'id' : '1', 'viewTagName' : 'app-view-productionusage',   'text' : 'Produktionsverbrauch',        'infoText' : 'Verbrauch von Artikeln buchen', 'shortcutText' : 'F1'},
-                              { 'id' : '2', 'viewTagName' : 'app-view-packaging',         'text' : 'Palettierung',                 'infoText' : 'Nachträgliche Palletierung', 'shortcutText' : 'F2'},
+    var mainMenuListData = [  { 'id' : '1', 'viewTagName' : 'app-view-productionusage',   'text' : 'Produktionsverbrauch',        'infoText' : '', 'shortcutText' : 'F1'},
+                              { 'id' : '2', 'viewTagName' : 'app-view-packaging',         'text' : 'Palettierung',                 'infoText' : '', 'shortcutText' : 'F2'},
                               /*
                               { 'id' : '1', 'viewTagName' : 'app-view-counting',          'text' : 'Inventur',                    'infoText' : 'Inventieren von Artikel', 'shortcutText' : 'F1'},
                               { 'id' : '2', 'viewTagName' : 'app-view-iteminfo',          'text' : 'Artikelinfo',                 'infoText' : 'Informationen zum Artikel', 'shortcutText' : 'F2'},
                               */
-                              { 'id' : '30', 'viewTagName' : 'app-view-appsettings',       'text' : 'Einstellungen',               'infoText' : 'Einstellungen für die Applikation', 'shortcutText' : 'F11'},                            
-                              { 'id' : '40', 'viewTagName' : '',                           'text' : 'Beenden',                     'infoText' : 'Beenden der Applikation', 'shortcutText' : 'F12'} ]
+                              { 'id' : '30', 'viewTagName' : 'app-view-appsettings',       'text' : 'Einstellungen',               'infoText' : '', 'shortcutText' : 'F11'},                            
+                              { 'id' : '40', 'viewTagName' : '',                           'text' : 'Beenden',                     'infoText' : '', 'shortcutText' : 'F12'} ]
 
     // every view tag needs to callback the mounted method so the <app-view> tag will know when its only child is mounted
     this.on('mount', () => {      
