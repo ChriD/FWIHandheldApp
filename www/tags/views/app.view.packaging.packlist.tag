@@ -21,7 +21,7 @@
         </div>
         <!-- TEST -->
 
-        <app-list itemtag="app-list-packitem" id="app-list-packChilds"></app-list>
+        <app-list itemtag="app-list-packitem" id="app-list-packChilds" selectionallowed="0"></app-list>
       </div>
     </div>
     <div class="view-buttonrow buttonRow">
@@ -125,9 +125,16 @@
       if(self.devMode == true)
       {
         document.getElementById("packagin-packlist-button-test1").onclick = function(){
-          var e = new Object()                 
-          e.value = document.getElementById("packagin-packlist-input-test1").value
-          self.barcodeReady(e)
+          var data = new Object()                 
+          data.value = document.getElementById("packagin-packlist-input-test1").value
+          if(!data.value)
+          {
+            data = {
+            "value" : "00390078440000003640",
+            "type"  : "GS1_128"
+            }
+          } 
+          self.barcodeReady(data)
         }           
       }
       else
@@ -257,16 +264,15 @@
 
     printSSCCLabel(_ssccPc, _copies = 1)
     {
-      self = this;
-      
-      if(!application.getAppSettings().SETTINGS_PACKLIST_PRINTER_ETISSCC_ID)
-        return Promise.reject("No printer Id for sscc label specified")
+      self = this;      
+      if(!application.getAppSettings().PACKLIST_PRINTER_ETISSCC_ID)
+        return Promise.reject("Keine Drucker-ID für SSCC angegeben")
 
-      if(!application.getAppSettings().SETTINGS_PACKLIST_PRINTER_ETISSCC_TMPL)
-        return Promise.reject("No printer template for sscc label specified")	
+      if(!application.getAppSettings().PACKLIST_PRINTER_ETISSCC_TMPL)
+        return Promise.reject("Kein Drucker-Template für SSCC angegeben!")	
 
       return new Promise(function(_resolve, _reject){	
-        self.app.sageX3Connector.modulePackaging.printDocument(application.getAppSettings().SETTINGS_PACKLIST_PRINTER_ETISSCC_ID, application.getAppSettings().SETTINGS_PACKLIST_PRINTER_ETISSCC_TMPL, "SSCCLABEL", _ssccPc, _copies).then(function(_data){					
+        application.sageX3Connector.modulePackaging.printDocument(application.getAppSettings().SETTINGS_PACKLIST_PRINTER_ETISSCC_ID, application.getAppSettings().SETTINGS_PACKLIST_PRINTER_ETISSCC_TMPL, "SSCCLABEL", _ssccPc, _copies).then(function(_data){					
           _resolve(_data);
         }).catch(function(_data){
           _reject(_data)

@@ -14,7 +14,8 @@
     self.currentSelectedDataIdx = -1
     self.currentSelectedElement = null
     self.listData = null
-    self.selectionCallback = null    
+    self.selectionCallback = null 
+    self.selectionAllowed = self.opts.selectionallowed ? self.opts.selectionallowed : true
 
 
     updateData()
@@ -67,6 +68,9 @@
 
     selectListItemIdx(_idx)
     {
+      if(!self.selectionAllowed || self.selectionAllowed == "0")
+        return
+
       // remove the old selection
       var elements = self.root.querySelectorAll("[data-idx='" + self.currentSelectedDataIdx + "']")
       if (elements.length)

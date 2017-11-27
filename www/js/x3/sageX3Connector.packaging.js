@@ -237,7 +237,7 @@ class SageX3Connector_Packaging
 	}
 
 
-	selectionBarcodeScanned(_barcode, _anyallowed = false, _scancode, _scancodeType, _addprefix = 1, _checkprefix = 1, _fnc1 = "") 
+	selectionBarcodeScanned(_barcode, _anyallowed = false, _scancodeType, _addprefix = 1, _checkprefix = 1, _fnc1 = "") 
     {		
 		self = this;
 		return new Promise(function(_resolve, _reject){

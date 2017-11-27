@@ -26,7 +26,13 @@
       document.getElementById("packaging-packlistsel-button-next").onclick = function(){
         if(self.devMode)
         {
-          self.barcodeReady("00390078440000004197")
+          
+          var data = {
+            "value" : "00390078440000004166",
+            "type"  : "GS1_128"
+          }          
+          self.barcodeReady(data)
+        
         }
       }        
       document.getElementById("packaging-packlistsel-button-cancel").onclick = function(){                        
@@ -68,7 +74,7 @@
       // here we may give some info to the user that the pallet is not ready to open?
       // TODO: @@@      
       application.setBusy(true)             
-      application.sageX3Connector.modulePackaging.selectionBarcodeScanned(_data.value, _data.type, 1, 1, self.FNC1).then(function(_result){
+      application.sageX3Connector.modulePackaging.selectionBarcodeScanned(_data.value, 1,  _data.type, 1, 1, self.FNC1).then(function(_result){
         if(_result.ISALLOWED = "1")
           application.changeAppView("app-view-packaging-packlist", self.createParam(_result.SSCCPC, _result.ISCLOSED))
         //else
