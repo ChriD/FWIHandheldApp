@@ -53,9 +53,9 @@ class AppHandheld extends App
     }
 
 
-    changeView(_viewContainerId, _viewId)
+    changeView(_viewContainerId, _viewId, _params = null)
     {        
-        super.changeView(_viewContainerId, _viewId)                        
+        super.changeView(_viewContainerId, _viewId, _params)                        
     }
 
 }

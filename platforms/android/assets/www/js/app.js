@@ -65,10 +65,10 @@ class App extends AppBase
     }
 
 
-    changeView(_viewContainerId, _viewId)
+    changeView(_viewContainerId, _viewId, _params = null)
     {
         var component = document.getElementById(_viewContainerId)
-        component._tag.changeView(_viewId)
+        component._tag.changeView(_viewId, false, _params)
     }
 
 

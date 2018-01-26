@@ -139,6 +139,7 @@
           e.value = "0199004699954211151805263010"
           //e.value = "0104002540351907151805263010"
           //e.value = "010400254035190715181113100011946474"
+          e.value = "01040025403519071518111310001194647"
           self.barcodeReady(e)
         }   
 
@@ -150,7 +151,7 @@
         }  
         document.getElementById("productionusage-button-testLot2").onclick = function(){
           var e = new Object()
-          self.lotFrom            = "LO1710M10002"  
+          self.lotFrom            = ""
           e.value = "100003470970008" + self.FNC1 + "310301000090K3"
           self.barcodeReady(e)
         } 

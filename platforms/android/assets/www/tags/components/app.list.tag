@@ -9,11 +9,13 @@
   <script>
     var self = this
     
-    self.menuItemTagName = self.opts.menuitemtag
+    self.itemTagName = self.opts.itemtag
     self.currentSelectedItemId = ""
     self.currentSelectedDataIdx = -1
+    self.currentSelectedElement = null
     self.listData = null
-    self.selectionCallback = null
+    self.selectionCallback = null 
+    self.selectionAllowed = self.opts.selectionallowed ? self.opts.selectionallowed : true
 
 
     updateData()
@@ -27,15 +29,23 @@
       if(!self.listData)
         return;
 
-      for(var i=0; i<self.listData.length; i++) 
-      {          
-          var childTagOptions = new Object()
-          childTagOptions.listItemData = self.listData[i]
-          var tagElement = document.createElement(self.menuItemTagName)
-          tagElement.id = self.getListItemId(self.listData[i].id);
-          tagElement.dataset.idx = i;
-          riot.mount(tagElement, self.menuItemTagName, childTagOptions)  
-          self.root.appendChild(tagElement) 
+      try
+      {
+
+        for(var i=0; i<self.listData.length; i++) 
+        {          
+            var childTagOptions = new Object()
+            childTagOptions.listItemData = self.listData[i]
+            var tagElement = document.createElement(self.itemTagName)
+            tagElement.id = self.getListItemId(self.listData[i].id);
+            tagElement.dataset.idx = i;
+            riot.mount(tagElement, self.itemTagName, childTagOptions)              
+            self.root.appendChild(tagElement) 
+        }
+      }
+      catch(_e)
+      {
+        application.logError(_e.toString())
       }
     }
 
@@ -58,25 +68,33 @@
 
     selectListItemIdx(_idx)
     {
+      if(!self.selectionAllowed || self.selectionAllowed == "0")
+        return
+
       // remove the old selection
-      var elements = document.querySelectorAll("[data-idx='" + self.currentSelectedDataIdx + "']")
+      var elements = self.root.querySelectorAll("[data-idx='" + self.currentSelectedDataIdx + "']")
       if (elements.length)
       {
-        var childElements = elements[0].getElementsByTagName("*")
-        for(i=0; i<childElements.length; i++) childElements[i].classList.toggle('selected');
+        var childElements = elements[0].getElementsByTagName("*")        
+        for(i=0; i<childElements.length; i++) childElements[i].classList.remove('selected');
         self.currentSelectedItemId  = "";
         self.currentSelectedDataIdx = -1
       }
 
       // "select" the list item
-      var elements = document.querySelectorAll("[data-idx='" + _idx + "']")
+      var elements = self.root.querySelectorAll("[data-idx='" + _idx + "']")
       if (elements.length)
       {
-        var childElements = elements[0].getElementsByTagName("*")
-        for(i=0; i<childElements.length; i++) childElements[i].classList.toggle('selected');
+        var childElements = elements[0].getElementsByTagName("*")        
+        for(i=0; i<childElements.length; i++) childElements[i].classList.add('selected');
         self.currentSelectedItemId  = self.getListItemId(elements[0].id);
         self.currentSelectedDataIdx = _idx
-      }    
+        self.currentSelectedElement = elements[0]
+      }
+      else
+      {
+        self.currentSelectedElement = null
+      }
     }
 
 
@@ -86,6 +104,8 @@
         self.selectListItemIdx(0)
       else if(self.currentSelectedDataIdx >=0 && self.listData.length > (self.currentSelectedDataIdx + 1) )
         self.selectListItemIdx(self.currentSelectedDataIdx + 1)
+      // TODO: if not visible, then scroll down
+      //self.root.scrollTop      
     }
 
 
@@ -95,6 +115,7 @@
         self.selectListItemIdx(0)
       else if(self.currentSelectedDataIdx >=0 && (self.currentSelectedDataIdx - 1) >= 0 )
         self.selectListItemIdx(self.currentSelectedDataIdx - 1)
+      // TODO: if not visible, then scroll up
     }
 
 
@@ -111,6 +132,11 @@
       self.itemSelected()
     }
     
+
+    getSelectedElement()
+    {
+      return self.currentSelectedElement
+    }
     
 
     this.on('handleKey', (_e) => {            

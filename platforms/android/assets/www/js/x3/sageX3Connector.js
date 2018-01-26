@@ -20,6 +20,7 @@ class SageX3Connector
         // modules
         this.modulePicking              =  new SageX3Connector_Picking(this);
         this.moduleProductionUsage      =  new SageX3Connector_ProductionUsage(this);
+        this.modulePackaging            =  new SageX3Connector_Packaging(this);
     }
 
     /**
@@ -35,6 +36,9 @@ class SageX3Connector
         this.setUserAndPass(_x3User, _x3Pass); 
 		this.setLangauge(_x3Lang);
         this.loadRequestTemplates();
+
+        this.X3Connected = false        
+
         // loading request templates is a sync action, so we can safely validate for existence of the values (even soap request tpl) here
         if (!this.validateBasicValues())
         {

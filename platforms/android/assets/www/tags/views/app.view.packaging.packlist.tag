@@ -272,7 +272,7 @@
         return Promise.reject("Kein Drucker-Template für SSCC angegeben!")	
 
       return new Promise(function(_resolve, _reject){	
-        application.sageX3Connector.modulePackaging.printDocument(application.getAppSettings().PACKLIST_PRINTER_ETISSCC_ID, application.getAppSettings().PACKLIST_PRINTER_ETISSCC_TMPL, "SSCCLABEL", _ssccPc, _copies).then(function(_data){					
+        application.sageX3Connector.modulePackaging.printDocument(application.getAppSettings().SETTINGS_PACKLIST_PRINTER_ETISSCC_ID, application.getAppSettings().SETTINGS_PACKLIST_PRINTER_ETISSCC_TMPL, "SSCCLABEL", _ssccPc, _copies).then(function(_data){					
           _resolve(_data);
         }).catch(function(_data){
           _reject(_data)
