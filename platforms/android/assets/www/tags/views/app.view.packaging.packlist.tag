@@ -86,7 +86,8 @@
             // current status is open. we have to close the list
             case 2:              
               application.setBusy(true)
-              application.sageX3Connector.modulePackaging.closeSSCCHeader(self.curSSCCPC).then(function(_result){        
+              application.sageX3Connector.modulePackaging.closeSSCCHeader(self.curSSCCPC).then(function(_result){   
+                self.printCurSSCCLabel()     
                 self.setListStatus(3)
                 self.updateInfo()
                 self.update()
@@ -166,7 +167,7 @@
         if(_e.keyCode == 0) // TODO: @@@duch  
         {
           // print sscc label
-          self.printCurSSCCLabel()         
+          //self.printCurSSCCLabel()         
         }
 
       }                    
@@ -254,7 +255,7 @@
         application.setBusy(false)
         self.update()
         // print sscc label
-        self.printCurSSCCLabel()
+        //self.printCurSSCCLabel()
       }).catch(function(_error){         
         application.logError(_error.toString())
         application.setBusy(false)
@@ -272,7 +273,7 @@
         return Promise.reject("Kein Drucker-Template für SSCC angegeben!")	
 
       return new Promise(function(_resolve, _reject){	
-        application.sageX3Connector.modulePackaging.printDocument(application.getAppSettings().SETTINGS_PACKLIST_PRINTER_ETISSCC_ID, application.getAppSettings().SETTINGS_PACKLIST_PRINTER_ETISSCC_TMPL, "SSCCLABEL", _ssccPc, _copies).then(function(_data){					
+        application.sageX3Connector.modulePackaging.printDocument(application.getAppSettings().PACKLIST_PRINTER_ETISSCC_ID, application.getAppSettings().PACKLIST_PRINTER_ETISSCC_TMPL, "SSCCLABEL", _ssccPc, _copies).then(function(_data){					
           _resolve(_data);
         }).catch(function(_data){
           _reject(_data)
