@@ -110,7 +110,7 @@
     this.scancodeData       = new Object()   
     this.postingLock        = true    
     this.lotFrom            = ""  
-    this.devMode            = false
+    this.devMode            = application.getAppSettings().DEV_MODE
 
     // every view tag needs to callback the mounted method so the <app-view> tag will know when its only child is mounted
     this.on('mount', () => {      

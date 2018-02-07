@@ -9,6 +9,11 @@
         <div id="appSettings-settings" class="settings">   
 
           <div class="settingsItem">
+            <div>DEV Mode</div>
+            <div><input type="checkbox" id="SETTINGS_X3_DEV_MODE" data-id="DEV_MODE"></input></div>
+          </div>
+
+          <div class="settingsItem">
             <div>X3 Webservice Url</div>
             <div><input type="text" id="SETTINGS_X3_URL" data-id="X3_URL"></input></div>
           </div>

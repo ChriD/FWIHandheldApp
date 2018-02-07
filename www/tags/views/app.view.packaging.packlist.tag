@@ -7,6 +7,10 @@
           <div class="centerAll">{ scanPrompterText }</div>          
         </div>
 
+        <div id="packaging-packlist-productionusage-ssccCount" class="ssccCount">
+          <div class="centerAll">Anzahl SSCC: { ssccCount }</div>
+        </div>
+
         <div id="packaging-packlist-productionusage-scanInfo" class="scanInfo">
           <div class="centerAll">{ scanInfoText }</div>
         </div>
@@ -42,11 +46,19 @@
       min-height: 2.25em;                    
       /*color: red;*/
       visibility: hidden;
-      margin-top: 0.5em;
+      margin-top: 0.25em;
       margin-bottom: 0.5em;
       font-size: 0.75em;
-      overflow-y: scroll;
-      margin-top: 0.5em;
+      overflow-y: scroll;  
+      padding-left: 1em;
+      padding-right: 1em;
+    }
+
+    .ssccCount {      
+      min-height: 1.5em;                          
+      margin-top: 0.25em;
+      font-size: 0.75em;
+      overflow: hidden;      
       padding-left: 1em;
       padding-right: 1em;
     }
@@ -66,10 +78,11 @@
     self.noSSCC = true
     self.params = null
     self.isMounted = false
-    self.devMode = true
+    self.devMode = application.getAppSettings().DEV_MODE
 
     self.scanPrompterText = ""
     self.scanInfoText     = ""
+    self.ssccCount        = 0
     self.unitListData     = new Array();
     self.listActionButtonText = ""
     self.curListStatus    = 0
@@ -190,7 +203,7 @@
     })
 
 
-    this.on('entered', (_params) => { 
+    this.on('entered', (_params) => {       
       self.params = _params 
       self.setScanInfo("", false)
 
@@ -332,6 +345,7 @@
     {
       application.setBusy(true)      
       application.sageX3Connector.modulePackaging.getPackageLines(self.curSSCCPC).then(function(_result){
+        self.ssccCount = _result.length
         self.updateListData(_result)
         if(_result.length)
         {

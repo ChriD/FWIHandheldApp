@@ -16,7 +16,7 @@
   <script>
     var self      = this
     self.FNC1     = '\u001d' 
-    self.devMode  = true
+    self.devMode  = application.getAppSettings().DEV_MODE
     
     // every view tag needs to callback the mounted method so the <app-view> tag will know when its only child is mounted
     this.on('mount', () => {      
